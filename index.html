@@ -120,10 +120,10 @@
             <div class="row cols-2">
               <label><span>Business Name *</span><input type="text" name="businessName" id="businessNameInput"
                   placeholder="Acme Services, Inc." required></label>
-              <label class="has-tooltip"><span>Website<span class="info-icon"
-                    data-tip="Must include 'http://' or 'https://' to ensure valid submission.">ⓘ
-                  </span></span><input type="url" name="website" id="websiteInput" placeholder="https://example.com" required
-                  pattern="^https?:\/\/.*$" title="Please include the full protocol (http:// or https://)"></label>
+            <label class="has-tooltip"><span>Website<span class="info-icon"
+                    data-tip="Enter a valid website URL (e.g., www.example.com or example.com)">ⓘ
+                  </span></span><input type="text" name="website" id="websiteInput" placeholder="www.example.com" required
+                  pattern="^(https?:\/\/)?(www\.)?[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]?(\.[a-zA-Z]{2,})+(\/.*)?$" title="Please enter a valid website URL (e.g., www.example.com or example.com)"></label>
               <!-- Fixed Industry Dropdown to match hubspot-->
               <label><span>Industry/Sector *</span>
                 <select name="industry" id="industrySelect">
