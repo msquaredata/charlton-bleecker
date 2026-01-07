@@ -494,7 +494,20 @@ window.addEventListener("load", () => {
         // 1. Create FormData from the base form (gets ALL text inputs and hidden multiselects)
         const formData = new FormData(form);
 
-        // // 2. CRITICAL FIX: Manually append the files from currentFiles 
+        // 2. Normalize website URL: ensure it has a protocol (https://) if missing
+        const websiteInput = document.getElementById("websiteInput");
+        if (websiteInput && websiteInput.value.trim()) {
+            let websiteValue = websiteInput.value.trim();
+            // Check if URL doesn't start with http:// or https://
+            if (!/^https?:\/\//i.test(websiteValue)) {
+                // Add https:// prefix
+                websiteValue = "https://" + websiteValue;
+                // Update the FormData with normalized value
+                formData.set("website", websiteValue);
+            }
+        }
+
+        // // 3. CRITICAL FIX: Manually append the files from currentFiles 
         // if (fileInput) {
         //     const FILE_FIELD_NAME = fileInput.name || "fileUpload";
 
