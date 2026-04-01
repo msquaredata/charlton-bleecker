@@ -6,7 +6,7 @@ import {
   searchContactByEmail,
   createObject,
   patchObject,
-  associateV4DefaultBatch,
+  associateV4DefaultPut,
   getDefaultPipelineAndStage,
   getFirstStageForPipeline,
   buildCompanyProperties,
@@ -172,9 +172,9 @@ export default async function handler(req, res) {
     const deal = await createObject(token, "deals", dealProps);
     const dealId = deal.id;
 
-    await associateV4DefaultBatch(token, "contact", "company", contactId, companyId);
-    await associateV4DefaultBatch(token, "deal", "contact", dealId, contactId);
-    await associateV4DefaultBatch(token, "deal", "company", dealId, companyId);
+    await associateV4DefaultPut(token, "contact", contactId, "company", companyId);
+    await associateV4DefaultPut(token, "deal", dealId, "contact", contactId);
+    await associateV4DefaultPut(token, "deal", dealId, "company", companyId);
 
     const subject = buildTeamNotifySubject(raw);
     const text = buildTeamNotifyBody(raw, n, dealId);
@@ -183,9 +183,19 @@ export default async function handler(req, res) {
     const redirect = process.env.THANK_YOU_REDIRECT || "thank-you.html";
     return res.status(200).json({ status: "received", redirect });
   } catch (err) {
-    console.error("lead-intake: HubSpot error", err?.message, err?.body || err);
-    return res.status(502).json({
+    const body = err?.body;
+    const hubspotMsg =
+      body &&
+      typeof body === "object" &&
+      "message" in body &&
+      (Array.isArray(body.message) ? body.message.join("; ") : String(body.message));
+    console.error("lead-intake: HubSpot error", err?.message, hubspotMsg || body || err);
+    const payload = {
       error: "Unable to complete intake. Please try again later.",
-    });
+    };
+    if (process.env.LEAD_INTAKE_DEBUG === "1" && hubspotMsg) {
+      payload.hint = hubspotMsg;
+    }
+    return res.status(502).json(payload);
   }
 }
