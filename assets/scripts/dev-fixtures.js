@@ -1,14 +1,21 @@
 /**
- * Dev-only: load sample values into #leadForm. Shown on localhost / 127.0.0.1 or ?devFixtures=1
+ * Test-data loader for #leadForm. Shown when:
+ * - localhost / 127.0.0.1
+ * - Vercel Preview & other *.vercel.app URLs (add ?devFixtures=0 to hide)
+ * - any host with ?devFixtures=1 to force on (e.g. custom-domain staging)
  */
 (function () {
-    function isDev() {
+    function showFixturesBar() {
+        const q = new URLSearchParams(location.search);
+        if (q.get("devFixtures") === "0") return false;
+        if (q.get("devFixtures") === "1") return true;
         const h = location.hostname;
         if (h === "localhost" || h === "127.0.0.1") return true;
-        return new URLSearchParams(location.search).get("devFixtures") === "1";
+        if (/\.vercel\.app$/i.test(h)) return true;
+        return false;
     }
 
-    if (!isDev()) return;
+    if (!showFixturesBar()) return;
 
     const TEST = {
         firstName: "Jane",
@@ -198,13 +205,15 @@
         const form = document.getElementById("leadForm");
         if (!form) return;
 
+        const badgeLabel = /\.vercel\.app$/i.test(location.hostname) ? "PREVIEW" : "DEV";
+
         const bar = document.createElement("div");
         bar.className = "dev-fixtures";
         bar.setAttribute("role", "region");
-        bar.setAttribute("aria-label", "Development test data");
+        bar.setAttribute("aria-label", "Test data loader");
         bar.innerHTML = `
       <div class="dev-fixtures__inner">
-        <span class="dev-fixtures__badge">DEV</span>
+        <span class="dev-fixtures__badge">${badgeLabel}</span>
         <span class="dev-fixtures__status" aria-live="polite"></span>
         <button type="button" class="dev-fixtures__btn dev-fixtures__btn--primary">Load test data</button>
         <button type="button" class="dev-fixtures__btn">Clear</button>
