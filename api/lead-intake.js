@@ -6,11 +6,12 @@ import {
   searchContactByEmail,
   createObject,
   patchObject,
-  associateV3Batch,
+  associateV4DefaultBatch,
+  getDefaultPipelineAndStage,
+  getFirstStageForPipeline,
   buildCompanyProperties,
   buildContactProperties,
   buildDealProperties,
-  ASSOCIATION_PATHS,
 } from "../lib/hubspot.js";
 import { sendTeamNotification, buildTeamNotifySubject, buildTeamNotifyBody } from "../lib/email.js";
 
@@ -151,31 +152,29 @@ export default async function handler(req, res) {
     }
     const contactId = contact.id;
 
-    const dealProps = buildDealProperties(raw, n);
+    const pipelineEnv = process.env.HUBSPOT_PIPELINE_ID;
+    const stageEnv = process.env.HUBSPOT_DEAL_STAGE_ID;
+    const hasExplicitPipeline = Boolean(pipelineEnv && pipelineEnv !== "default");
+    const hasExplicitStage = Boolean(stageEnv);
+
+    let pipeline;
+    let dealstage;
+    if (!hasExplicitPipeline) {
+      const resolved = await getDefaultPipelineAndStage(token);
+      pipeline = resolved.pipeline;
+      dealstage = hasExplicitStage ? stageEnv : resolved.stage;
+    } else {
+      pipeline = pipelineEnv;
+      dealstage = hasExplicitStage ? stageEnv : await getFirstStageForPipeline(token, pipeline);
+    }
+
+    const dealProps = buildDealProperties(raw, { ...n, pipeline, dealstage });
     const deal = await createObject(token, "deals", dealProps);
     const dealId = deal.id;
 
-    await associateV3Batch(
-      token,
-      ASSOCIATION_PATHS.contactCompany,
-      contactId,
-      companyId,
-      "contact_to_company"
-    );
-    await associateV3Batch(
-      token,
-      ASSOCIATION_PATHS.dealContact,
-      dealId,
-      contactId,
-      "deal_to_contact"
-    );
-    await associateV3Batch(
-      token,
-      ASSOCIATION_PATHS.dealCompany,
-      dealId,
-      companyId,
-      "deal_to_company"
-    );
+    await associateV4DefaultBatch(token, "contact", "company", contactId, companyId);
+    await associateV4DefaultBatch(token, "deal", "contact", dealId, contactId);
+    await associateV4DefaultBatch(token, "deal", "company", dealId, companyId);
 
     const subject = buildTeamNotifySubject(raw);
     const text = buildTeamNotifyBody(raw, n, dealId);
