@@ -54,6 +54,28 @@ function validate(raw) {
   return missing;
 }
 
+/** Flatten HubSpot CRM error JSON for logs / optional client hint */
+function summarizeHubSpotBody(body) {
+  if (!body || typeof body !== "object") return "";
+  const parts = [];
+  if (body.message != null) {
+    const m = body.message;
+    parts.push(Array.isArray(m) ? m.join("; ") : String(m));
+  }
+  if (Array.isArray(body.errors)) {
+    for (const e of body.errors) {
+      if (!e || typeof e !== "object") continue;
+      let line = [e.message, e.code].filter(Boolean).join(" ");
+      const props = e.context?.propertyName;
+      if (Array.isArray(props) && props.length) {
+        line = line ? `${line} (${props.join(", ")})` : props.join(", ");
+      }
+      if (line) parts.push(line);
+    }
+  }
+  return parts.filter(Boolean).join(" — ");
+}
+
 export default async function handler(req, res) {
   setCors(res);
 
@@ -184,16 +206,15 @@ export default async function handler(req, res) {
     return res.status(200).json({ status: "received", redirect });
   } catch (err) {
     const body = err?.body;
-    const hubspotMsg =
-      body &&
-      typeof body === "object" &&
-      "message" in body &&
-      (Array.isArray(body.message) ? body.message.join("; ") : String(body.message));
+    const hubspotMsg = summarizeHubSpotBody(body) || (typeof body === "string" ? body : "");
     console.error("lead-intake: HubSpot error", err?.message, hubspotMsg || body || err);
     const payload = {
       error: "Unable to complete intake. Please try again later.",
     };
-    if (process.env.LEAD_INTAKE_DEBUG === "1" && hubspotMsg) {
+    const exposeHint =
+      hubspotMsg &&
+      (process.env.LEAD_INTAKE_DEBUG === "1" || process.env.VERCEL_ENV === "preview");
+    if (exposeHint) {
       payload.hint = hubspotMsg;
     }
     return res.status(502).json(payload);
