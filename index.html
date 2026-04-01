@@ -9,77 +9,22 @@
   <title>Charlton Bleecker — Deal Prospect Intake</title>
 </head>
 
-<body>
-  <!-- <div class="topbar">
-    <div class="topbar-inner">
-      <div class="brand">
-        <div class="logo">CB</div>
-        <div>
-          <h1>Charlton Bleecker</h1>
-          <p>Acquiring, scaling & operating enduring businesses</p>
-        </div>
-      </div>
-      <nav class="nav">
-        
-      </nav>
-    </div>
-  </div> -->
+<body class="page-intake">
 
- <main class="container">
-    <section class="grid grid-5"">
-    <!--    <div class="hero">
-        <h2>Deal Prospect Intake</h2>
-        <p>Share a concise snapshot of the opportunity. Estimates are fine. This helps us quickly determine fit and get
-          you a fast, thoughtful response.</p>
-        <div class="bullets">
-          <div class="bullet">
-            <div class="tick">✓</div> 5–7 min
-          </div>
-          <div class="bullet">
-            <div class="tick">✓</div> Secure & confidential
-          </div>
-          <div class="bullet">
-            <div class="tick">✓</div> Owner or advisor friendly
-          </div>
-          <div class="bullet">
-            <div class="tick">✓</div> CRM-ready fields
-          </div>
-        </div>
-      </div> -->
+  <main class="container page-main">
+    <section class="hero hero--intake" aria-labelledby="intake-heading">
+      <h1 id="intake-heading">Deal Prospect Intake</h1>
+      <p class="hero-lead">Share a concise snapshot of the opportunity. Estimates are fine — we use this to assess fit and respond thoughtfully.</p>
+      <ul class="hero-bullets">
+        <li><span class="tick" aria-hidden="true">✓</span> About 5–7 minutes</li>
+        <li><span class="tick" aria-hidden="true">✓</span> Secure &amp; confidential</li>
+        <li><span class="tick" aria-hidden="true">✓</span> Owner or advisor friendly</li>
+        <li><span class="tick" aria-hidden="true">✓</span> Structured for our deal team</li>
+      </ul>
     </section>
 
-    <section class="card shell">
-      <!-- <div class="formgrid">
-        <aside class="rail">
-          <h4>Sections</h4>
-          <ol>
-            <li><span class="num">1</span> Contact</li>
-            <li><span class="num">2</span> Business</li>
-            <li><span class="num">3</span> Ownership</li>
-            <li><span class="num">4</span> Financials</li>
-            <li><span class="num">5</span> Fit</li>
-            <li><span class="num">6</span> Miscellaneous</li>
-          </ol>
-
-          <div class="why">
-            <strong>Why we ask</strong><br>
-            We use this info to route the deal to the right partner and respond quickly. High-level numbers are fine.
-          </div>
-
-          <div class="aside ui">
-            <h3>What we look for</h3>
-            <ul>
-              <li>Durable cash flows, recurring or reoccurring revenue</li>
-              <li>Strong teams seeking succession or growth support</li>
-              <li>Lower middle market, $2M–$50M revenue (flexible)</li>
-              <li>Business services, industrials, healthcare, consumer</li>
-            </ul>
-            <div class="note">If you have a teaser/CIM, add it at the end. If not, quick bullet points are perfect.
-            </div>
-          </div> -->
-        </aside>
-
-        <form id="leadForm" action="https://msquaresolutions.app.n8n.cloud/webhook/lead-intake" method="POST"
+    <section class="card shell form-card">
+        <form id="leadForm" action="/api/lead-intake" method="POST"
           enctype="multipart/form-data">
 
           <!-- 1. Contact -->
@@ -123,10 +68,10 @@
             <label class="has-tooltip"><span>Website<span class="info-icon"
                     data-tip="Enter a valid website URL (e.g., www.example.com or example.com)">ⓘ
                   </span></span><input type="text" name="website" id="websiteInput" placeholder="www.example.com" required
-                  pattern="^(https?:\/\/)?(www\.)?[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]?(\.[a-zA-Z]{2,})+(\/.*)?$" title="Please enter a valid website URL (e.g., www.example.com or example.com)"></label>
+                  pattern="^(https?:\/\/)?(www\.)?[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9]?(\.[a-zA-Z]{2,})+(/.*)?$" title="Please enter a valid website URL (e.g., www.example.com or example.com)"></label>
               <!-- Fixed Industry Dropdown to match hubspot-->
               <label><span>Industry/Sector *</span>
-                <select name="industry" id="industrySelect">
+                <select name="industry" id="industrySelect" required>
                     <option value="" disabled selected>Loading options...</option>
                 </select>
                 
@@ -378,24 +323,18 @@
           </div>
           <div class="submitbar">
             <span class="muted">By submitting, you agree to our confidentiality & data use terms.</span>
-            <div style="display:flex; gap:10px;">
-              <!-- NEW: Test Button added here -->
-              <!-- <button type="button" id="loadTestDataButton" class="btn" style="background-color: #555; color: white;">
-                Load Test Data
-              </button> -->
+            <div class="submitbar-actions">
               <button type="submit" class="btn">Submit</button>
             </div>
           </div>
         </form>
-      </div>
     </section>
 
-    <footer>© 2025 Charlton Bleecker Group LLC — All rights reserved.</footer>
+    <footer>© 2026 Charlton Bleecker Group LLC — All rights reserved.</footer>
   </main>
 
   <script src="assets/scripts/form.js"></script>
-    <!-- CRITICAL: Link the new, separate test file. REMOVE this line for production -->
-  <script src="assets/scripts/testdataloader.js"></script> 
+  <script src="assets/scripts/dev-fixtures.js"></script>
 </body>
 
 </html>
