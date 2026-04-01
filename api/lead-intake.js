@@ -88,7 +88,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const token = process.env.HUBSPOT_ACCESS_TOKEN;
+  const token = process.env.HUBSPOT_ACCESS_TOKEN?.trim();
   if (!token) {
     if (process.env.LEAD_INTAKE_BYPASS_HUBSPOT === "true") {
       console.warn("lead-intake: LEAD_INTAKE_BYPASS_HUBSPOT — skipping HubSpot (local test only)");
@@ -207,15 +207,31 @@ export default async function handler(req, res) {
   } catch (err) {
     const body = err?.body;
     const hubspotMsg = summarizeHubSpotBody(body) || (typeof body === "string" ? body : "");
+    const status = err?.status;
+    const isHubSpotAuthFailure =
+      status === 401 ||
+      /: 401\b/.test(String(err?.message || "")) ||
+      /oauth token|access token|unauthorized|invalid.*token|expired.*token/i.test(hubspotMsg);
+
     console.error("lead-intake: HubSpot error", err?.message, hubspotMsg || body || err);
+
     const payload = {
       error: "Unable to complete intake. Please try again later.",
     };
     const exposeHint =
-      hubspotMsg &&
+      (hubspotMsg || isHubSpotAuthFailure) &&
       (process.env.LEAD_INTAKE_DEBUG === "1" || process.env.VERCEL_ENV === "preview");
+
     if (exposeHint) {
-      payload.hint = hubspotMsg;
+      if (isHubSpotAuthFailure) {
+        payload.hint =
+          "HubSpot rejected the access token (wrong value, revoked private app, or expired token). In Vercel → Project → Settings → Environment Variables, set HUBSPOT_ACCESS_TOKEN to a current Private App access token from HubSpot (Settings → Integrations → Private Apps). Redeploy after saving.";
+        if (process.env.LEAD_INTAKE_DEBUG === "1" && hubspotMsg) {
+          payload.detail = hubspotMsg;
+        }
+      } else if (hubspotMsg) {
+        payload.hint = hubspotMsg;
+      }
     }
     return res.status(502).json(payload);
   }
