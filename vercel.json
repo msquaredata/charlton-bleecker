@@ -1,4 +1,11 @@
 {
+  "redirects": [
+    {
+      "source": "/deal-prospect-intake.html",
+      "destination": "/",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
