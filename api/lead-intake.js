@@ -88,20 +88,6 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const token = process.env.HUBSPOT_ACCESS_TOKEN?.trim();
-  if (!token) {
-    if (process.env.LEAD_INTAKE_BYPASS_HUBSPOT === "true") {
-      console.warn("lead-intake: LEAD_INTAKE_BYPASS_HUBSPOT — skipping HubSpot (local test only)");
-      const redirect = process.env.THANK_YOU_REDIRECT || "thank-you.html";
-      return res.status(200).json({ status: "received", redirect });
-    }
-    console.error("lead-intake: HUBSPOT_ACCESS_TOKEN is not set");
-    return res.status(500).json({
-      error: "Server configuration error",
-      hint: "Add HUBSPOT_ACCESS_TOKEN to .env.local, or set LEAD_INTAKE_BYPASS_HUBSPOT=true to test the form without HubSpot.",
-    });
-  }
-
   const contentType = req.headers["content-type"] || "";
   if (!contentType.includes("multipart/form-data")) {
     return res.status(400).json({ error: "Expected multipart/form-data" });
@@ -152,6 +138,39 @@ export default async function handler(req, res) {
 
   const n = normalizeLeadPayload(raw);
 
+  const token = process.env.HUBSPOT_ACCESS_TOKEN?.trim();
+  if (!token) {
+    if (process.env.LEAD_INTAKE_BYPASS_HUBSPOT === "true") {
+      console.warn(
+        "lead-intake: LEAD_INTAKE_BYPASS_HUBSPOT — skipping HubSpot (local test only); sending team email if Resend is configured."
+      );
+      const subject = buildTeamNotifySubject(raw);
+      const text = buildTeamNotifyBody(raw, n, "bypass-no-hubspot-deal");
+      const emailResult = await sendTeamNotification({ subject, text });
+      if (emailResult.skipped) {
+        console.warn(
+          "[email] Team notification skipped: set RESEND_API_KEY and INTERNAL_NOTIFY_EMAIL (or TEAM_NOTIFY_EMAIL) to test Resend in bypass mode."
+        );
+      } else if (!emailResult.ok) {
+        console.error("[email] Resend error (bypass mode):", emailResult.status, emailResult.errText);
+        return res.status(502).json({
+          error: "Email notification failed",
+          hint:
+            typeof emailResult.errText === "string"
+              ? emailResult.errText.slice(0, 500)
+              : "Resend API returned an error. Check NOTIFY_FROM_EMAIL domain verification in Resend.",
+        });
+      }
+      const redirect = process.env.THANK_YOU_REDIRECT || "thank-you.html";
+      return res.status(200).json({ status: "received", redirect });
+    }
+    console.error("lead-intake: HUBSPOT_ACCESS_TOKEN is not set");
+    return res.status(500).json({
+      error: "Server configuration error",
+      hint: "Add HUBSPOT_ACCESS_TOKEN to .env.local, or set LEAD_INTAKE_BYPASS_HUBSPOT=true to test the form without HubSpot.",
+    });
+  }
+
   try {
     let company = n.domain ? await searchCompanyByDomain(token, n.domain) : null;
 
@@ -200,7 +219,14 @@ export default async function handler(req, res) {
 
     const subject = buildTeamNotifySubject(raw);
     const text = buildTeamNotifyBody(raw, n, dealId);
-    await sendTeamNotification({ subject, text });
+    const emailResult = await sendTeamNotification({ subject, text });
+    if (emailResult.skipped) {
+      console.warn(
+        "[email] Team notification skipped after HubSpot success: set RESEND_API_KEY and INTERNAL_NOTIFY_EMAIL on this deployment."
+      );
+    } else if (!emailResult.ok) {
+      console.error("[email] Resend error after HubSpot success:", emailResult.status, emailResult.errText);
+    }
 
     const redirect = process.env.THANK_YOU_REDIRECT || "thank-you.html";
     return res.status(200).json({ status: "received", redirect });

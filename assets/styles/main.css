@@ -174,21 +174,26 @@ a { color: inherit; }
   margin: 24px auto 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  /* Fixed 2×2: equal row heights so all four pills match */
-  grid-template-rows: repeat(2, 6rem);
-  gap: 10px;
-  max-width: 560px;
+  /* One row: equal-width columns; row height follows tallest pill */
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  max-width: min(100%, 920px);
   width: 100%;
+  align-items: stretch;
+}
+
+@media (max-width: 640px) {
+  .hero-bullets {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 560px;
+  }
 }
 
 .hero-bullets li {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
   width: 100%;
-  height: 100%;
   min-width: 0;
   min-height: 0;
   box-sizing: border-box;
@@ -198,22 +203,24 @@ a { color: inherit; }
   color: var(--txt);
   background: #f7f7f7;
   border: 1px solid var(--border);
-  padding: 8px 12px;
+  padding: 6px 10px;
   border-radius: 999px;
   text-align: center;
 }
 
-.hero-bullets .tick {
-  width: 18px;
-  height: 18px;
-  border-radius: 999px;
-  background: rgba(255, 77, 61, 0.15);
-  border: 1px solid rgba(255, 77, 61, 0.45);
-  color: var(--primary);
-  display: grid;
-  place-items: center;
-  font-size: 11px;
-  flex-shrink: 0;
+.hero-bullets .pill-lines {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 0;
+  text-align: center;
+}
+
+.hero-bullets .pill-line {
+  display: block;
+  line-height: 1.2;
 }
 
 .hero:not(.hero--intake) {
