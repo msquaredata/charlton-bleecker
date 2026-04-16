@@ -13,7 +13,12 @@ import {
   buildContactProperties,
   buildDealProperties,
 } from "../lib/hubspot.js";
-import { sendTeamNotification, buildTeamNotifySubject, buildTeamNotifyBody } from "../lib/email.js";
+import {
+  sendTeamNotification,
+  sendSubmitterConfirmation,
+  buildTeamNotifySubject,
+  buildTeamNotifyBody,
+} from "../lib/email.js";
 
 function setCors(res) {
   res.setHeader("Access-Control-Allow-Origin", process.env.CORS_ALLOW_ORIGIN || "*");
@@ -147,7 +152,7 @@ export default async function handler(req, res) {
 
   if (shouldSkipHubSpot()) {
     console.warn(
-      "lead-intake: HubSpot skipped (LEAD_INTAKE_BYPASS_HUBSPOT). Team email only — never enable in production."
+      "lead-intake: HubSpot skipped (LEAD_INTAKE_BYPASS_HUBSPOT). Team + submitter email via Resend — never enable in production."
     );
     const subject = buildTeamNotifySubject(raw);
     const text = buildTeamNotifyBody(raw, n, "bypass-no-hubspot-deal");
@@ -165,6 +170,10 @@ export default async function handler(req, res) {
             ? emailResult.errText.slice(0, 500)
             : "Resend API returned an error. Check NOTIFY_FROM_EMAIL domain verification in Resend.",
       });
+    }
+    const subResult = await sendSubmitterConfirmation(raw);
+    if (!subResult.skipped && !subResult.ok) {
+      console.error("[email] Submitter confirmation failed (HubSpot skipped):", subResult.status, subResult.errText);
     }
     const redirect = process.env.THANK_YOU_REDIRECT || "thank-you.html";
     return res.status(200).json({ status: "received", redirect });
@@ -234,6 +243,11 @@ export default async function handler(req, res) {
       );
     } else if (!emailResult.ok) {
       console.error("[email] Resend error after HubSpot success:", emailResult.status, emailResult.errText);
+    }
+
+    const subResult = await sendSubmitterConfirmation(raw);
+    if (!subResult.skipped && !subResult.ok) {
+      console.error("[email] Submitter confirmation failed after HubSpot success:", subResult.status, subResult.errText);
     }
 
     const redirect = process.env.THANK_YOU_REDIRECT || "thank-you.html";
