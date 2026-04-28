@@ -334,7 +334,19 @@
   </main>
 
   <script src="assets/scripts/form.js"></script>
-  <script src="assets/scripts/dev-fixtures.js"></script>
+  <script>
+    (function () {
+      const host = String(window.location.hostname || "").toLowerCase();
+      const isProdHost = host === "charltonbleecker.com" || host === "www.charltonbleecker.com";
+
+      if (isProdHost) return;
+
+      const s = document.createElement("script");
+      s.src = "assets/scripts/dev-fixtures.js";
+      s.defer = true;
+      document.body.appendChild(s);
+    })();
+  </script>
 </body>
 
 </html>
