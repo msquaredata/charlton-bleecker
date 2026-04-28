@@ -511,6 +511,21 @@ body.thankyou.page-intake {
   gap: 24px;
 }
 
+/* Embedded (iframe) thank-you: avoid vertical centering "too low" */
+body.embedded.thankyou.page-intake {
+  min-height: auto;
+}
+
+body.embedded .thankyou-main {
+  min-height: auto;
+}
+
+body.embedded .thankyou-content {
+  justify-content: flex-start;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
 .thankyou-content .hero--intake {
   margin-bottom: 0;
   display: flex;

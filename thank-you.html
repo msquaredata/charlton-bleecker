@@ -31,6 +31,18 @@
     <footer>© 2026 Charlton Bleecker Group LLC — All rights reserved.</footer>
   </main>
 
+  <script>
+    (function () {
+      try {
+        if (window.self !== window.top) {
+          document.body.classList.add("embedded");
+        }
+      } catch (e) {
+        // If cross-origin blocks access to window.top, we are embedded.
+        document.body.classList.add("embedded");
+      }
+    })();
+  </script>
 </body>
 
 </html>
