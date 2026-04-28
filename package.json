@@ -1,0 +1,8 @@
+{
+  "name": "charlton-bleecker",
+  "private": true,
+  "description": "Workspace root — run dev from here so Vercel uses lead-intake-form-cbg (api/, index.html).",
+  "scripts": {
+    "dev": "vercel dev ./lead-intake-form-cbg"
+  }
+}
