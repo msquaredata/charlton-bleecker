@@ -337,7 +337,10 @@
   <script>
     (function () {
       const host = String(window.location.hostname || "").toLowerCase();
-      const isProdHost = host === "charltonbleecker.com" || host === "www.charltonbleecker.com";
+      const isProdHost =
+        host === "charltonbleecker.com" ||
+        host === "www.charltonbleecker.com" ||
+        host === "lead-intake-form-cbg.vercel.app";
 
       if (isProdHost) return;
 

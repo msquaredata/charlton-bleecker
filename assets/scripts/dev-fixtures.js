@@ -9,9 +9,15 @@
         const q = new URLSearchParams(location.search);
         if (q.get("devFixtures") === "0") return false;
         if (q.get("devFixtures") === "1") return true;
-        const h = location.hostname;
+        const h = String(location.hostname || "").toLowerCase();
         if (h === "localhost" || h === "127.0.0.1") return true;
-        if (/\.vercel\.app$/i.test(h)) return true;
+        // Hide on known production hosts (even if Vercel provides a *.vercel.app alias).
+        if (h === "charltonbleecker.com" || h === "www.charltonbleecker.com") return false;
+        if (h === "lead-intake-form-cbg.vercel.app") return false;
+
+        // Vercel preview/branch deployments use additional subdomain labels.
+        // Example: project-git-branch-user.vercel.app or project-hash.vercel.app
+        if (/\.vercel\.app$/i.test(h) && h.split(".").length > 3) return true;
         return false;
     }
 
