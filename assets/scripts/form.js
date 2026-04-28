@@ -5,6 +5,72 @@ window.addEventListener("load", () => {
         leadForm.action = `${base}/api/lead-intake`;
     }
 
+    const isEmbedded = () => {
+        try {
+            return window.self !== window.top;
+        } catch (_e) {
+            return true;
+        }
+    };
+
+    const fallbackThankYouHtml = () => `
+      <section class="hero hero--intake hero--thankyou" aria-labelledby="thankyou-heading">
+        <h1 id="thankyou-heading">Thank you</h1>
+        <p class="hero-lead">Your deal prospect intake was received. We appreciate you sharing the opportunity with us.</p>
+      </section>
+      <section class="card shell form-card thankyou-panel">
+        <div class="thankyou-inner">
+          <p class="thankyou-message">Our team will review your submission shortly. If your opportunity aligns with our current focus areas, a partner will reach out with next steps.</p>
+          <div class="thankyou-actions">
+            <a href="/" class="btn">Submit another response</a>
+          </div>
+        </div>
+      </section>
+    `;
+
+    const getThankYouFragmentHtml = async (redirectURL) => {
+        const url = redirectURL || "thank-you.html";
+        try {
+            const res = await fetch(url, { credentials: "same-origin" });
+            if (!res.ok) throw new Error(`Failed to fetch thank-you page: ${res.status}`);
+            const html = await res.text();
+            const doc = new DOMParser().parseFromString(html, "text/html");
+            const content = doc.querySelector(".thankyou-content");
+            return content ? content.innerHTML : fallbackThankYouHtml();
+        } catch (_e) {
+            return fallbackThankYouHtml();
+        }
+    };
+
+    const showInlineThankYou = async (redirectURL) => {
+        const container =
+            document.querySelector("main.page-main") ||
+            document.querySelector("main") ||
+            document.body;
+
+        const existing = document.getElementById("inlineThankYou");
+        if (existing) {
+            existing.scrollIntoView({ behavior: "smooth", block: "start" });
+            return;
+        }
+
+        const wrapper = document.createElement("div");
+        wrapper.id = "inlineThankYou";
+        wrapper.className = "thankyou-content";
+        wrapper.innerHTML = await getThankYouFragmentHtml(redirectURL);
+
+        // Replace the form card with the thank-you panel (keeps user anchored in the embed).
+        const formCard = document.querySelector(".form-card");
+        if (formCard && formCard.parentElement) {
+            formCard.replaceWith(wrapper);
+        } else {
+            container.prepend(wrapper);
+        }
+
+        // Ensure the message is visible without scrolling the parent page.
+        wrapper.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+
     const industriesCsvUrl = new URL("assets/data/industries.csv", window.location.href).href;
     loadDropdownFromCSV("industrySelect", industriesCsvUrl);
 
@@ -240,7 +306,11 @@ window.addEventListener("load", () => {
 
             if (response.ok && data.status === "received") {
                 const redirectURL = data.redirect || "thank-you.html";
-                setTimeout(() => (window.location.href = redirectURL), 800);
+                if (isEmbedded()) {
+                    await showInlineThankYou(redirectURL);
+                } else {
+                    setTimeout(() => (window.location.href = redirectURL), 800);
+                }
             } else {
                 let msg = "Submission failed. Please try again.";
                 if (data && typeof data.hint === "string") msg += "\n\n" + data.hint;
