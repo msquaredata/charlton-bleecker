@@ -134,11 +134,11 @@ const debouncedPersist = debounce(() => persistCurrentBody(), 400);
 async function connect() {
   const secret = $("secretInput").value.trim();
   const errEl = $("gateError");
-  errEl.style.display = "none";
+  errEl.hidden = true;
 
   if (!secret) {
     errEl.textContent = "Enter the utility secret.";
-    errEl.style.display = "block";
+    errEl.hidden = false;
     return;
   }
 
@@ -149,7 +149,7 @@ async function connect() {
     });
   } catch (e) {
     errEl.textContent = `Network error: ${e?.message || e}`;
-    errEl.style.display = "block";
+    errEl.hidden = false;
     return;
   }
 
@@ -158,7 +158,7 @@ async function connect() {
       res.status === 401
         ? "Unauthorized — check OUTREACH_UTILITY_SECRET."
         : `Failed to load (${res.status}).`;
-    errEl.style.display = "block";
+    errEl.hidden = false;
     return;
   }
 

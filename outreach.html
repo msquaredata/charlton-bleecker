@@ -10,72 +10,110 @@
   <title>Charlton Bleecker — Introductory email utility</title>
 </head>
 
-<body class="page-intake">
+<body class="page-intake page-outreach">
 
-  <main class="container page-main">
-    <section class="card shell form-card">
-      <header style="margin-bottom: 1.25rem;">
-        <h1 style="margin: 0 0 0.5rem 0; font-size: 1.35rem;">Introductory email utility</h1>
-        <p class="muted" style="margin: 0;">Compose outbound emails with Charlton Bleecker templates. Requires utility secret and Resend configuration on the server.</p>
-        <p style="margin: 0.75rem 0 0 0;"><a href="/">← Deal prospect intake form</a></p>
+  <main class="container page-main outreach-main">
+    <div class="outreach-stack">
+
+      <header class="outreach-blade outreach-blade--hero">
+        <h1 class="outreach-hero-title">Introductory email utility</h1>
+        <p class="outreach-hero-lead muted">Compose outbound emails with Charlton Bleecker templates. Requires the utility secret and Resend configuration on the server.</p>
+        <p class="outreach-hero-nav"><a href="/">← Deal prospect intake form</a></p>
       </header>
 
-      <div id="gatePanel">
-        <label><span>Utility secret</span>
-          <input type="password" id="secretInput" autocomplete="off" placeholder="OUTREACH_UTILITY_SECRET">
+      <section id="gatePanel" class="outreach-blade outreach-blade--gate" aria-labelledby="gate-heading">
+        <div class="outreach-blade__head">
+          <h2 id="gate-heading" class="outreach-blade__title">Access</h2>
+          <p class="outreach-blade__hint muted">Enter <code>OUTREACH_UTILITY_SECRET</code> from your environment, then load templates.</p>
+        </div>
+        <label class="outreach-field-first"><span>Utility secret</span>
+          <input type="password" id="secretInput" autocomplete="off" placeholder="Paste secret">
         </label>
-        <div style="margin-top: 1rem;">
+        <div class="outreach-actions-row">
           <button type="button" class="btn" id="btnConnect">Load templates</button>
         </div>
-        <p id="gateError" class="muted" style="color: var(--danger, #b33); margin-top: 0.75rem; display: none;"></p>
-      </div>
+        <p id="gateError" class="outreach-alert muted" role="alert" hidden></p>
+      </section>
 
-      <div id="editorPanel" hidden>
-        <div class="section-title"><span>Recipient &amp; send</span></div>
-        <div class="row cols-2">
-          <label><span>To (email)</span><input type="email" id="toInput" placeholder="prospect@company.com"></label>
-          <label><span>Subject</span><input type="text" id="subjectInput"></label>
-        </div>
+      <div id="editorPanel" class="outreach-editor-stack" hidden>
 
-        <div class="section-title" style="margin-top: 1.25rem;"><span>Template</span></div>
-        <label><span>Choose template</span>
-          <select id="templateSelect"></select>
-        </label>
+        <section class="outreach-blade" aria-labelledby="blade-recipient">
+          <div class="outreach-blade__head">
+            <h2 id="blade-recipient" class="outreach-blade__title">Recipient &amp; subject</h2>
+          </div>
+          <div class="row cols-2 outreach-blade-grid">
+            <label><span>To (email)</span><input type="email" id="toInput" placeholder="prospect@company.com"></label>
+            <label><span>Subject</span><input type="text" id="subjectInput"></label>
+          </div>
+        </section>
 
-        <div class="section-title" style="margin-top: 1.25rem;"><span>Merge fields</span></div>
-        <div class="row cols-2">
-          <label><span>Recipient name</span><input type="text" id="recipientFullName" placeholder="{{recipientFullName}}"></label>
-          <label><span>Company name</span><input type="text" id="companyName" placeholder="{{companyName}}"></label>
-          <label><span>Sector</span><input type="text" id="sector" placeholder="{{sector}}"></label>
-          <label><span>Date</span><input type="text" id="dateField" placeholder="Auto"></label>
-          <label><span>Sender name</span><input type="text" id="senderName"></label>
-          <label><span>Sender title line</span><input type="text" id="senderTitleLine"></label>
-          <label style="grid-column: 1 / -1;"><span>Sender address</span><textarea id="senderAddress" rows="2"></textarea></label>
-          <label><span>Office phone</span><input type="text" id="officePhone"></label>
-        </div>
-
-        <div class="section-title" style="margin-top: 1.25rem;"><span>Letter body</span></div>
-        <p class="muted" style="margin-top: 0;">Tokens such as <code>{{recipientFullName}}</code> are replaced using the merge fields above. Signature and CTA are added automatically below your text.</p>
-        <label><span>Edit body</span><textarea id="bodyEditor" rows="16" style="font-family: ui-monospace, monospace; font-size: 0.9rem;"></textarea></label>
-
-        <div style="margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
-          <button type="button" class="btn" id="btnResetTemplate">Reset to default</button>
-          <button type="button" class="btn secondary" id="btnExport">Export JSON</button>
-          <label class="btn secondary" style="cursor: pointer; margin: 0;">
-            Import JSON
-            <input type="file" id="importFile" accept="application/json" hidden>
+        <section class="outreach-blade" aria-labelledby="blade-template">
+          <div class="outreach-blade__head">
+            <h2 id="blade-template" class="outreach-blade__title">Template</h2>
+            <p class="outreach-blade__hint muted">Cold outreach vs enquiry response — pick the narrative that fits.</p>
+          </div>
+          <label class="outreach-field-first"><span>Choose template</span>
+            <select id="templateSelect"></select>
           </label>
-        </div>
+        </section>
 
-        <div class="section-title" style="margin-top: 1.5rem;"><span>Preview</span></div>
-        <iframe id="previewFrame" title="Email preview" sandbox="allow-same-origin" style="width: 100%; min-height: 420px; border: 1px solid var(--border, #ddd); border-radius: 4px; background: #fff;"></iframe>
+        <section class="outreach-blade" aria-labelledby="blade-merge">
+          <div class="outreach-blade__head">
+            <h2 id="blade-merge" class="outreach-blade__title">Merge fields</h2>
+            <p class="outreach-blade__hint muted">Values replace <code>{{tokens}}</code> in the letter body.</p>
+          </div>
+          <div class="row cols-2 outreach-blade-grid">
+            <label><span>Recipient name</span><input type="text" id="recipientFullName" placeholder="{{recipientFullName}}"></label>
+            <label><span>Company name</span><input type="text" id="companyName" placeholder="{{companyName}}"></label>
+            <label><span>Sector</span><input type="text" id="sector" placeholder="{{sector}}"></label>
+            <label><span>Date</span><input type="text" id="dateField" placeholder="Leave blank for today"></label>
+            <label><span>Sender name</span><input type="text" id="senderName"></label>
+            <label><span>Sender title line</span><input type="text" id="senderTitleLine"></label>
+            <label class="outreach-span-full"><span>Sender address</span><textarea id="senderAddress" rows="3"></textarea></label>
+            <label><span>Office phone</span><input type="text" id="officePhone"></label>
+          </div>
+        </section>
 
-        <div style="margin-top: 1.25rem;">
-          <button type="button" class="btn" id="btnSend">Send email</button>
-          <span id="sendStatus" class="muted" style="margin-left: 0.75rem;"></span>
-        </div>
+        <section class="outreach-blade" aria-labelledby="blade-body">
+          <div class="outreach-blade__head">
+            <h2 id="blade-body" class="outreach-blade__title">Letter body</h2>
+            <p class="outreach-blade__hint muted">Signature and intake CTA are added below this text automatically.</p>
+          </div>
+          <label class="outreach-field-first outreach-body-label"><span>Edit body</span>
+            <textarea id="bodyEditor" rows="16" class="outreach-body-editor"></textarea>
+          </label>
+          <div class="outreach-toolbar">
+            <button type="button" class="btn" id="btnResetTemplate">Reset to default</button>
+            <button type="button" class="btn secondary" id="btnExport">Export JSON</button>
+            <label class="btn secondary outreach-import-label">
+              Import JSON
+              <input type="file" id="importFile" accept="application/json" hidden>
+            </label>
+          </div>
+        </section>
+
+        <section class="outreach-blade outreach-blade--preview" aria-labelledby="blade-preview">
+          <div class="outreach-blade__head">
+            <h2 id="blade-preview" class="outreach-blade__title">Preview</h2>
+            <p class="outreach-blade__hint muted">Approximate rendering as recipients may see it.</p>
+          </div>
+          <div class="outreach-preview-frame-wrap">
+            <iframe id="previewFrame" title="Email preview" sandbox="allow-same-origin" class="outreach-preview-frame"></iframe>
+          </div>
+        </section>
+
+        <section class="outreach-blade outreach-blade--send" aria-labelledby="blade-send">
+          <div class="outreach-blade__head">
+            <h2 id="blade-send" class="outreach-blade__title">Send</h2>
+          </div>
+          <div class="outreach-send-row">
+            <button type="button" class="btn" id="btnSend">Send email</button>
+            <span id="sendStatus" class="muted outreach-send-status"></span>
+          </div>
+        </section>
+
       </div>
-    </section>
+    </div>
   </main>
 
   <script type="module" src="assets/scripts/outreach.js"></script>
