@@ -387,7 +387,26 @@ function importJson(file) {
   reader.readAsText(file);
 }
 
+function allSectionDetails() {
+  return document.querySelectorAll("details.outreach-details");
+}
+
+function expandAllSections() {
+  allSectionDetails().forEach((el) => {
+    el.open = true;
+  });
+}
+
+function collapseAllSections() {
+  allSectionDetails().forEach((el) => {
+    el.open = false;
+  });
+}
+
 function wire() {
+  $("btnExpandAll").addEventListener("click", () => expandAllSections());
+  $("btnCollapseAll").addEventListener("click", () => collapseAllSections());
+
   $("btnConnect").addEventListener("click", () => connect());
 
   $("templateSelect").addEventListener("change", () => {

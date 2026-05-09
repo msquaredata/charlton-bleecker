@@ -1190,6 +1190,19 @@ label.field-error span {
   border-bottom-color: var(--primary);
 }
 
+.page-outreach .outreach-global-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.page-outreach .outreach-global-actions .btn.secondary {
+  padding: 10px 18px;
+  font-size: 14px;
+}
+
 .page-outreach .outreach-blade__title {
   margin: 0 0 6px 0;
   font-size: 1.0625rem;
