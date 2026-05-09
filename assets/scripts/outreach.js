@@ -5,8 +5,9 @@ import {
 } from "./outreach-render.js";
 
 const STORAGE_BODY_PREFIX = "outreach-editor-v1-body";
+const STORAGE_ENVELOPE = "outreach-envelope-v1";
 
-/** @type {{ ctaUrl: string, logoUrl: string, tagline: string, signatureLines: string[], mergeDefaults: Record<string, string>, templates: Array<{ id: string, label: string, group: string, closingPhrase: string, subjectSuggestion: string, defaultBody: string }> } | null} */
+/** @type {{ ctaUrl: string, logoUrl: string, tagline: string, defaultFrom?: string, defaultReplyTo?: string, envelopeHint?: string, signatureLines: string[], mergeDefaults: Record<string, string>, templates: Array<{ id: string, label: string, group: string, closingPhrase: string, subjectSuggestion: string, defaultBody: string }> } | null} */
 let meta = null;
 let outreachSecret = "";
 
@@ -76,6 +77,34 @@ function applyMergeDefaults() {
   $("sector").value = d.sector ?? "";
 }
 
+function loadEnvelopeStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_ENVELOPE);
+    if (!raw) return null;
+    const o = JSON.parse(raw);
+    if (typeof o !== "object" || !o) return null;
+    return {
+      from: typeof o.from === "string" ? o.from : "",
+      replyTo: typeof o.replyTo === "string" ? o.replyTo : "",
+    };
+  } catch {
+    return null;
+  }
+}
+
+function applyEnvelopeFields() {
+  if (!meta) return;
+  const hintEl = $("envelopeHint");
+  if (hintEl) {
+    hintEl.textContent = meta.envelopeHint || "";
+  }
+  const stored = loadEnvelopeStorage();
+  $("fromInput").value =
+    stored?.from ?? meta.defaultFrom ?? "";
+  $("replyToInput").value =
+    stored?.replyTo ?? meta.defaultReplyTo ?? "";
+}
+
 function fillTemplateSelect() {
   const sel = $("templateSelect");
   sel.innerHTML = "";
@@ -131,6 +160,20 @@ function debounce(fn, ms) {
 
 const debouncedPersist = debounce(() => persistCurrentBody(), 400);
 
+const debouncedPersistEnvelope = debounce(() => {
+  try {
+    localStorage.setItem(
+      STORAGE_ENVELOPE,
+      JSON.stringify({
+        from: $("fromInput").value,
+        replyTo: $("replyToInput").value,
+      })
+    );
+  } catch (_e) {
+    /* ignore quota */
+  }
+}, 400);
+
 async function connect() {
   const secret = $("secretInput").value.trim();
   const errEl = $("gateError");
@@ -170,6 +213,7 @@ async function connect() {
 
   fillTemplateSelect();
   applyMergeDefaults();
+  applyEnvelopeFields();
 
   if ($("templateSelect").options.length) {
     $("templateSelect").selectedIndex = 0;
@@ -227,7 +271,14 @@ async function sendEmail() {
         Authorization: `Bearer ${secret}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ to, subject, html, text }),
+      body: JSON.stringify({
+        to,
+        subject,
+        html,
+        text,
+        from: $("fromInput").value.trim(),
+        replyTo: $("replyToInput").value.trim(),
+      }),
     });
   } catch (e) {
     statusEl.textContent = `Send failed: ${e?.message || e}`;
@@ -236,7 +287,11 @@ async function sendEmail() {
 
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
-    statusEl.textContent = data.error || `Error ${res.status}`;
+    let msg = data.error || `Error ${res.status}`;
+    if (data.detail) {
+      msg += `: ${data.detail}`;
+    }
+    statusEl.textContent = msg;
     return;
   }
 
@@ -262,10 +317,14 @@ function exportJson() {
     if (v !== null) bodies[t.id] = v;
   }
   const payload = {
-    version: 1,
+    version: 2,
     exportedAt: new Date().toISOString(),
     bodies,
     mergeFields: collectVars(),
+    envelope: {
+      from: $("fromInput").value,
+      replyTo: $("replyToInput").value,
+    },
   };
   const blob = new Blob([JSON.stringify(payload, null, 2)], {
     type: "application/json",
@@ -302,6 +361,22 @@ function importJson(file) {
           $("senderAddress").value = String(m.senderAddress);
         if (m.officePhone != null) $("officePhone").value = String(m.officePhone);
         if (m.date != null) $("dateField").value = String(m.date);
+      }
+      if (data.envelope && typeof data.envelope === "object") {
+        const env = data.envelope;
+        if (env.from != null) $("fromInput").value = String(env.from);
+        if (env.replyTo != null) $("replyToInput").value = String(env.replyTo);
+        try {
+          localStorage.setItem(
+            STORAGE_ENVELOPE,
+            JSON.stringify({
+              from: $("fromInput").value,
+              replyTo: $("replyToInput").value,
+            })
+          );
+        } catch (_e) {
+          /* ignore */
+        }
       }
       onTemplateChange();
       $("sendStatus").textContent = "Import applied.";
@@ -348,6 +423,9 @@ function wire() {
       if (id === "bodyEditor") debouncedPersist();
     });
   }
+
+  $("fromInput").addEventListener("input", () => debouncedPersistEnvelope());
+  $("replyToInput").addEventListener("input", () => debouncedPersistEnvelope());
 
   $("bodyEditor").addEventListener("blur", () => persistCurrentBody());
 }

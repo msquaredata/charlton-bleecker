@@ -1,5 +1,6 @@
 import "../lib/load-env.js";
 import { sendViaResend } from "../lib/email.js";
+import { getOutreachFromDefault } from "../lib/intro-templates/constants.js";
 
 function setCors(res) {
   res.setHeader("Access-Control-Allow-Origin", process.env.CORS_ALLOW_ORIGIN || "*");
@@ -22,6 +23,27 @@ function checkSecret(req) {
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_HTML = 600_000;
 const MAX_TEXT = 200_000;
+const MAX_FROM = 320;
+
+function sanitizeOneLine(s, max) {
+  return String(s ?? "")
+    .replace(/[\r\n\u2028\u2029]/g, " ")
+    .trim()
+    .slice(0, max);
+}
+
+/** @returns {{ list: string[] } | { error: string }} */
+function parseReplyToField(raw) {
+  const t = String(raw ?? "").trim();
+  if (!t) return { list: [] };
+  const parts = t.split(",").map((p) => p.trim()).filter(Boolean);
+  for (const p of parts) {
+    if (!EMAIL_RE.test(p)) {
+      return { error: `Invalid Reply-To address: ${p}` };
+    }
+  }
+  return { list: parts };
+}
 
 /** Remove obvious script injections from HTML body (internal tool; light guard). */
 function stripDangerousHtml(html) {
@@ -76,7 +98,30 @@ export default async function handler(req, res) {
     text = html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
   }
 
-  const result = await sendViaResend({ to, subject, html, text });
+  let fromHeader = sanitizeOneLine(body.from, MAX_FROM);
+  if (!fromHeader) {
+    fromHeader = getOutreachFromDefault();
+  }
+  if (!fromHeader.includes("@")) {
+    return res.status(400).json({
+      error:
+        "From must include an email address on a domain verified in Resend (e.g. G Todd Silva <you@mail.charltonbleecker.com>).",
+    });
+  }
+
+  const replyParsed = parseReplyToField(body.replyTo);
+  if ("error" in replyParsed) {
+    return res.status(400).json({ error: replyParsed.error });
+  }
+
+  const result = await sendViaResend({
+    to,
+    subject,
+    html,
+    text,
+    from: fromHeader,
+    replyTo: replyParsed.list.length ? replyParsed.list : undefined,
+  });
 
   if (result.skipped) {
     return res.status(503).json({
@@ -88,6 +133,10 @@ export default async function handler(req, res) {
     return res.status(502).json({
       error: "Send failed",
       status: result.status,
+      detail:
+        typeof result.errText === "string"
+          ? result.errText.slice(0, 800)
+          : undefined,
     });
   }
 

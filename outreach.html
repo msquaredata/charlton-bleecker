@@ -21,96 +21,136 @@
         <p class="outreach-hero-nav"><a href="/">← Deal prospect intake form</a></p>
       </header>
 
-      <section id="gatePanel" class="outreach-blade outreach-blade--gate" aria-labelledby="gate-heading">
-        <div class="outreach-blade__head">
-          <h2 id="gate-heading" class="outreach-blade__title">Access</h2>
-          <p class="outreach-blade__hint muted">Enter <code>OUTREACH_UTILITY_SECRET</code> from your environment, then load templates.</p>
+      <details id="gatePanel" class="outreach-blade outreach-blade--gate outreach-details" open>
+        <summary class="outreach-blade__summary">
+          <span class="outreach-blade__summary-inner">
+            <h2 id="gate-heading" class="outreach-blade__title">Access</h2>
+            <p class="outreach-blade__hint muted">Enter <code>OUTREACH_UTILITY_SECRET</code> from your environment, then load templates.</p>
+          </span>
+        </summary>
+        <div class="outreach-blade__content">
+          <label class="outreach-field-first"><span>Utility secret</span>
+            <input type="password" id="secretInput" autocomplete="off" placeholder="Paste secret">
+          </label>
+          <div class="outreach-actions-row">
+            <button type="button" class="btn" id="btnConnect">Load templates</button>
+          </div>
+          <p id="gateError" class="outreach-alert muted" role="alert" hidden></p>
         </div>
-        <label class="outreach-field-first"><span>Utility secret</span>
-          <input type="password" id="secretInput" autocomplete="off" placeholder="Paste secret">
-        </label>
-        <div class="outreach-actions-row">
-          <button type="button" class="btn" id="btnConnect">Load templates</button>
-        </div>
-        <p id="gateError" class="outreach-alert muted" role="alert" hidden></p>
-      </section>
+      </details>
 
       <div id="editorPanel" class="outreach-editor-stack" hidden>
 
-        <section class="outreach-blade" aria-labelledby="blade-recipient">
-          <div class="outreach-blade__head">
-            <h2 id="blade-recipient" class="outreach-blade__title">Recipient &amp; subject</h2>
+        <details class="outreach-blade outreach-details" open aria-labelledby="blade-recipient">
+          <summary class="outreach-blade__summary">
+            <span class="outreach-blade__summary-inner">
+              <h2 id="blade-recipient" class="outreach-blade__title">Recipient &amp; subject</h2>
+            </span>
+          </summary>
+          <div class="outreach-blade__content">
+            <div class="row cols-2 outreach-blade-grid">
+              <label><span>To (email)</span><input type="email" id="toInput" placeholder="prospect@company.com"></label>
+              <label><span>Subject</span><input type="text" id="subjectInput"></label>
+            </div>
           </div>
-          <div class="row cols-2 outreach-blade-grid">
-            <label><span>To (email)</span><input type="email" id="toInput" placeholder="prospect@company.com"></label>
-            <label><span>Subject</span><input type="text" id="subjectInput"></label>
-          </div>
-        </section>
+        </details>
 
-        <section class="outreach-blade" aria-labelledby="blade-template">
-          <div class="outreach-blade__head">
-            <h2 id="blade-template" class="outreach-blade__title">Template</h2>
-            <p class="outreach-blade__hint muted">Cold outreach vs enquiry response — pick the narrative that fits.</p>
-          </div>
-          <label class="outreach-field-first"><span>Choose template</span>
-            <select id="templateSelect"></select>
-          </label>
-        </section>
-
-        <section class="outreach-blade" aria-labelledby="blade-merge">
-          <div class="outreach-blade__head">
-            <h2 id="blade-merge" class="outreach-blade__title">Merge fields</h2>
-            <p class="outreach-blade__hint muted">Values replace <code>{{tokens}}</code> in the letter body.</p>
-          </div>
-          <div class="row cols-2 outreach-blade-grid">
-            <label><span>Recipient name</span><input type="text" id="recipientFullName" placeholder="{{recipientFullName}}"></label>
-            <label><span>Company name</span><input type="text" id="companyName" placeholder="{{companyName}}"></label>
-            <label><span>Sector</span><input type="text" id="sector" placeholder="{{sector}}"></label>
-            <label><span>Date</span><input type="text" id="dateField" placeholder="Leave blank for today"></label>
-            <label><span>Sender name</span><input type="text" id="senderName"></label>
-            <label><span>Sender title line</span><input type="text" id="senderTitleLine"></label>
-            <label class="outreach-span-full"><span>Sender address</span><textarea id="senderAddress" rows="3"></textarea></label>
-            <label><span>Office phone</span><input type="text" id="officePhone"></label>
-          </div>
-        </section>
-
-        <section class="outreach-blade" aria-labelledby="blade-body">
-          <div class="outreach-blade__head">
-            <h2 id="blade-body" class="outreach-blade__title">Letter body</h2>
-            <p class="outreach-blade__hint muted">Signature and intake CTA are added below this text automatically.</p>
-          </div>
-          <label class="outreach-field-first outreach-body-label"><span>Edit body</span>
-            <textarea id="bodyEditor" rows="16" class="outreach-body-editor"></textarea>
-          </label>
-          <div class="outreach-toolbar">
-            <button type="button" class="btn" id="btnResetTemplate">Reset to default</button>
-            <button type="button" class="btn secondary" id="btnExport">Export JSON</button>
-            <label class="btn secondary outreach-import-label">
-              Import JSON
-              <input type="file" id="importFile" accept="application/json" hidden>
+        <details class="outreach-blade outreach-details" open aria-labelledby="blade-template">
+          <summary class="outreach-blade__summary">
+            <span class="outreach-blade__summary-inner">
+              <h2 id="blade-template" class="outreach-blade__title">Template</h2>
+              <p class="outreach-blade__hint muted">Cold outreach vs enquiry response — pick the narrative that fits.</p>
+            </span>
+          </summary>
+          <div class="outreach-blade__content">
+            <label class="outreach-field-first"><span>Choose template</span>
+              <select id="templateSelect"></select>
             </label>
           </div>
-        </section>
+        </details>
 
-        <section class="outreach-blade outreach-blade--preview" aria-labelledby="blade-preview">
-          <div class="outreach-blade__head">
-            <h2 id="blade-preview" class="outreach-blade__title">Preview</h2>
-            <p class="outreach-blade__hint muted">Approximate rendering as recipients may see it.</p>
+        <details class="outreach-blade outreach-details" open aria-labelledby="blade-merge">
+          <summary class="outreach-blade__summary">
+            <span class="outreach-blade__summary-inner">
+              <h2 id="blade-merge" class="outreach-blade__title">Merge fields</h2>
+              <p class="outreach-blade__hint muted">Values replace <code>{{tokens}}</code> in the letter body.</p>
+            </span>
+          </summary>
+          <div class="outreach-blade__content">
+            <div class="row cols-2 outreach-blade-grid">
+              <label><span>Recipient name</span><input type="text" id="recipientFullName" placeholder="{{recipientFullName}}"></label>
+              <label><span>Company name</span><input type="text" id="companyName" placeholder="{{companyName}}"></label>
+              <label><span>Sector</span><input type="text" id="sector" placeholder="{{sector}}"></label>
+              <label><span>Date</span><input type="text" id="dateField" placeholder="Leave blank for today"></label>
+              <label><span>Sender name</span><input type="text" id="senderName"></label>
+              <label><span>Sender title line</span><input type="text" id="senderTitleLine"></label>
+              <label class="outreach-span-full"><span>Sender address</span><textarea id="senderAddress" rows="3"></textarea></label>
+              <label><span>Office phone</span><input type="text" id="officePhone"></label>
+            </div>
           </div>
-          <div class="outreach-preview-frame-wrap">
-            <iframe id="previewFrame" title="Email preview" sandbox="allow-same-origin" class="outreach-preview-frame"></iframe>
-          </div>
-        </section>
+        </details>
 
-        <section class="outreach-blade outreach-blade--send" aria-labelledby="blade-send">
-          <div class="outreach-blade__head">
-            <h2 id="blade-send" class="outreach-blade__title">Send</h2>
+        <details class="outreach-blade outreach-details" open aria-labelledby="blade-body">
+          <summary class="outreach-blade__summary">
+            <span class="outreach-blade__summary-inner">
+              <h2 id="blade-body" class="outreach-blade__title">Letter body</h2>
+              <p class="outreach-blade__hint muted">Signature and intake CTA are added below this text automatically.</p>
+            </span>
+          </summary>
+          <div class="outreach-blade__content">
+            <label class="outreach-field-first outreach-body-label"><span>Edit body</span>
+              <textarea id="bodyEditor" rows="16" class="outreach-body-editor"></textarea>
+            </label>
+            <div class="outreach-toolbar">
+              <button type="button" class="btn" id="btnResetTemplate">Reset to default</button>
+              <button type="button" class="btn secondary" id="btnExport">Export JSON</button>
+              <label class="btn secondary outreach-import-label">
+                Import JSON
+                <input type="file" id="importFile" accept="application/json" hidden>
+              </label>
+            </div>
           </div>
-          <div class="outreach-send-row">
-            <button type="button" class="btn" id="btnSend">Send email</button>
-            <span id="sendStatus" class="muted outreach-send-status"></span>
+        </details>
+
+        <details class="outreach-blade outreach-blade--preview outreach-details" open aria-labelledby="blade-preview">
+          <summary class="outreach-blade__summary">
+            <span class="outreach-blade__summary-inner">
+              <h2 id="blade-preview" class="outreach-blade__title">Preview</h2>
+              <p class="outreach-blade__hint muted">Approximate rendering as recipients may see it.</p>
+            </span>
+          </summary>
+          <div class="outreach-blade__content">
+            <div class="outreach-preview-frame-wrap">
+              <iframe id="previewFrame" title="Email preview" sandbox="allow-same-origin" class="outreach-preview-frame"></iframe>
+            </div>
           </div>
-        </section>
+        </details>
+
+        <details class="outreach-blade outreach-blade--send outreach-details" open aria-labelledby="blade-send">
+          <summary class="outreach-blade__summary">
+            <span class="outreach-blade__summary-inner">
+              <h2 id="blade-send" class="outreach-blade__title">Send</h2>
+              <p id="envelopeHint" class="outreach-blade__hint muted"></p>
+            </span>
+          </summary>
+          <div class="outreach-blade__content">
+            <div class="row cols-2 outreach-blade-grid">
+              <label class="outreach-span-full"><span>From</span>
+                <input type="text" id="fromInput" autocomplete="email" spellcheck="false"
+                  placeholder='G Todd Silva &lt;gts@mail.charltonbleecker.com&gt;'>
+              </label>
+              <label class="outreach-span-full"><span>Reply-To</span>
+                <input type="text" id="replyToInput" autocomplete="email" spellcheck="false"
+                  placeholder="gts@CharltonBleecker.com">
+              </label>
+            </div>
+            <p class="muted outreach-replyto-note">Reply-To is optional. Leave blank to omit; use one email or separate multiple with commas.</p>
+            <div class="outreach-send-row">
+              <button type="button" class="btn" id="btnSend">Send email</button>
+              <span id="sendStatus" class="muted outreach-send-status"></span>
+            </div>
+          </div>
+        </details>
 
       </div>
     </div>

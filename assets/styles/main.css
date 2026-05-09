@@ -1078,12 +1078,78 @@ label.field-error span {
   gap: 22px;
 }
 
-.page-outreach .outreach-blade {
+/* Static card (hero header only); collapsible sections use details.outreach-details */
+.page-outreach header.outreach-blade {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
   padding: clamp(22px, 4vw, 34px);
+}
+
+.page-outreach details.outreach-details.outreach-blade {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 0;
+  overflow: hidden;
+}
+
+.page-outreach details.outreach-details > summary.outreach-blade__summary {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  list-style: none;
+  cursor: pointer;
+  padding: clamp(22px, 4vw, 34px);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.page-outreach details.outreach-details > summary.outreach-blade__summary::-webkit-details-marker {
+  display: none;
+}
+
+.page-outreach details.outreach-details > summary.outreach-blade__summary::before {
+  content: "";
+  flex-shrink: 0;
+  width: 9px;
+  height: 9px;
+  margin-top: 7px;
+  border-right: 2px solid var(--primary);
+  border-bottom: 2px solid var(--primary);
+  transform: rotate(-45deg);
+  transition: transform 0.2s ease, margin 0.2s ease;
+}
+
+.page-outreach details.outreach-details[open] > summary.outreach-blade__summary::before {
+  transform: rotate(45deg);
+  margin-top: 5px;
+}
+
+.page-outreach details.outreach-details[open] > summary.outreach-blade__summary {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 18px;
+}
+
+.page-outreach details.outreach-details > .outreach-blade__content {
+  padding: 18px clamp(22px, 4vw, 34px) clamp(22px, 4vw, 34px);
+}
+
+.page-outreach details.outreach-details > summary.outreach-blade__summary:focus {
+  outline: none;
+}
+
+.page-outreach details.outreach-details > summary.outreach-blade__summary:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+
+.page-outreach details.outreach-details .outreach-blade__summary-inner {
+  flex: 1;
+  min-width: 0;
 }
 
 .page-outreach .outreach-blade--hero {
@@ -1124,10 +1190,6 @@ label.field-error span {
   border-bottom-color: var(--primary);
 }
 
-.page-outreach .outreach-blade__head {
-  margin-bottom: 18px;
-}
-
 .page-outreach .outreach-blade__title {
   margin: 0 0 6px 0;
   font-size: 1.0625rem;
@@ -1149,6 +1211,15 @@ label.field-error span {
   border-radius: 6px;
   background: rgba(0, 0, 0, 0.05);
   border: 1px solid var(--border);
+}
+
+.page-outreach .outreach-blade__summary-inner .outreach-blade__title:last-child {
+  margin-bottom: 0;
+}
+
+.page-outreach .outreach-replyto-note {
+  margin: 12px 0 0 0;
+  font-size: 13px;
 }
 
 .page-outreach .outreach-field-first {
@@ -1196,7 +1267,7 @@ label.field-error span {
   font-size: 14px;
 }
 
-.page-outreach .outreach-blade--preview {
+.page-outreach details.outreach-blade--preview {
   background: linear-gradient(180deg, #fafafa 0%, var(--card) 48%);
 }
 
@@ -1217,7 +1288,7 @@ label.field-error span {
   background: #fff;
 }
 
-.page-outreach .outreach-blade--send {
+.page-outreach details.outreach-blade--send {
   border-color: rgba(255, 77, 61, 0.35);
   box-shadow: 0 4px 20px rgba(255, 77, 61, 0.12);
 }
