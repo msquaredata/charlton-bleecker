@@ -1,0 +1,40 @@
+{
+  "redirects": [
+    {
+      "source": "/deal-prospect-intake.html",
+      "destination": "/submit",
+      "permanent": true
+    },
+    {
+      "source": "/aboutus",
+      "destination": "/#about",
+      "permanent": true
+    },
+    {
+      "source": "/aboutus-1",
+      "destination": "/#contact",
+      "permanent": true
+    },
+    {
+      "source": "/team",
+      "destination": "/#team",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "destination": "/#blog",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "frame-ancestors 'self' https://www.charltonbleecker.com http://www.charltonbleecker.com https://alligator-jellyfish-7lt8.squarespace.com;"
+        }
+      ]
+    }
+  ]
+}

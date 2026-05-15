@@ -1,8 +1,35 @@
 {
   "name": "charlton-bleecker",
+  "version": "0.1.0",
   "private": true,
-  "description": "Workspace root — run dev from here so Vercel uses lead-intake-form-cbg (api/, index.html).",
   "scripts": {
-    "dev": "vercel dev ./lead-intake-form-cbg"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "postbuild": "next-sitemap"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.0.0",
+    "framer-motion": "^12.0.0",
+    "lucide-react": "^0.468.0",
+    "next": "16.2.6",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "react-hook-form": "^7.54.0",
+    "tailwind-merge": "^3.6.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "babel-plugin-react-compiler": "1.0.0",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.6",
+    "next-sitemap": "^4.2.3",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }
