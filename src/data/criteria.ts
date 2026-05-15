@@ -2,17 +2,17 @@ export const PILLARS = [
   {
     title: "Operational Freedom",
     body: "Our model gives managers the freedom to lead, with the backing of experienced investors focused on long-term value creation. We provide capital and strategic support — not a new boss.",
-    image: "/assets/pillar-operational.jpg",
+    image: "/operationalfreedom.png",
   },
   {
     title: "Collaborative Expertise",
     body: "Our team brings deep expertise spanning corporate finance, M&A, capital raising, governance, legal, and turnarounds — providing both strategic insight and tactical execution from day one.",
-    image: "/assets/pillar-collaborative.jpg",
+    image: "/collaborativeexperience.png",
   },
   {
     title: "Sector Focus",
     body: "We invest in industries where we can add meaningful value: Healthcare, Technology, Defense, Professional Services, and Industrials.",
-    image: "/assets/pillar-sector.jpg",
+    image: "/sectorfocus.png",
   },
 ] as const;
 

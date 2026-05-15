@@ -1,3 +1,4 @@
+import Image from "next/image";
 import FadeUp from "@/components/ui/FadeUp";
 import { PILLARS } from "@/data/criteria";
 
@@ -31,10 +32,15 @@ export default function About() {
               className="h-full min-h-0"
             >
               <article className="flex h-full min-h-0 flex-col overflow-hidden rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] shadow-sm">
-                <div
-                  className="aspect-[16/10] shrink-0 bg-gradient-to-br from-[var(--color-surface)] via-[#ebe8e2] to-[var(--color-border)]"
-                  aria-hidden
-                />
+                <div className="relative aspect-[16/10] shrink-0 overflow-hidden bg-[var(--color-surface)]">
+                  <Image
+                    src={p.image}
+                    alt={p.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                  />
+                </div>
                 <div className="flex flex-1 flex-col p-6">
                   <h3 className="font-display text-xl font-semibold text-[var(--color-dark)]">
                     {p.title}
