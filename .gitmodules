@@ -1,0 +1,3 @@
+[submodule "lead-intake-form-cbg"]
+	path = lead-intake-form-cbg
+	url = https://github.com/msquaredata/lead-intake-form-cbg.git
