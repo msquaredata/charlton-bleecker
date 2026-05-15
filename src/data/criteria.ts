@@ -1,12 +1,12 @@
 export const PILLARS = [
   {
     title: "Operational Freedom",
-    body: "Our model gives managers the freedom to lead, with the backing of experienced investors focused on long-term value creation. We provide capital and strategic support — not a new boss.",
+    body: "Our model gives managers the freedom to lead, with the backing of experienced investors focused on long-term value creation. We provide capital and strategic support, not a new boss.",
     image: "/operationalfreedom.png",
   },
   {
     title: "Collaborative Expertise",
-    body: "Our team brings deep expertise spanning corporate finance, M&A, capital raising, governance, legal, and turnarounds — providing both strategic insight and tactical execution from day one.",
+    body: "Our team brings deep expertise spanning corporate finance, M&A, capital raising, governance, legal, and turnarounds, providing both strategic insight and tactical execution from day one.",
     image: "/collaborativeexperience.png",
   },
   {
@@ -31,12 +31,12 @@ export const WHY_US = [
   {
     icon: "Shield" as const,
     title: "Your Legacy, Protected",
-    body: "We don't flip. We hold. Your brand, culture, and people remain intact after the transaction — no integration into a portfolio, no culture reset.",
+    body: "We don't flip. We hold. Your brand, culture, and people remain intact after the transaction, with no integration into a portfolio, no culture reset.",
   },
   {
     icon: "Users" as const,
     title: "Operational Autonomy",
-    body: "Management stays in place. We provide capital and strategic support — not a new boss or a corporate playbook.",
+    body: "Management stays in place. We provide capital and strategic support, not a new boss or a corporate playbook.",
   },
   {
     icon: "CheckCircle" as const,
@@ -68,7 +68,7 @@ export const PROCESS_STEPS = [
   {
     number: "01",
     title: "Intro Call",
-    body: "30-minute conversation to assess fit — no pressure, no deck required.",
+    body: "30-minute conversation to assess fit, with no pressure, no deck required.",
   },
   {
     number: "02",
@@ -83,7 +83,7 @@ export const PROCESS_STEPS = [
   {
     number: "04",
     title: "Due Diligence",
-    body: "Focused, respectful diligence process — typically 45–60 days.",
+    body: "Focused, respectful diligence process, typically 45–60 days.",
   },
   {
     number: "05",

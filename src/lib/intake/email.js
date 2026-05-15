@@ -1,5 +1,5 @@
 /**
- * Team notification — parity with former n8n Outlook step.
+ * Team notification, parity with former n8n Outlook step.
  * Set RESEND_API_KEY + INTERNAL_NOTIFY_EMAIL (+ optional FROM_EMAIL) or use SMTP (see .env.example).
  */
 
@@ -8,7 +8,7 @@
  * @param {Record<string, string>} raw
  */
 export function buildTeamNotifySubject(raw) {
-  return `New Deal Submission — ${raw.firstName} ${raw.lastName} - ${raw.businessName}`;
+  return `New Deal Submission: ${raw.firstName} ${raw.lastName} - ${raw.businessName}`;
 }
 
 /**
@@ -39,7 +39,7 @@ Deal Summary: ${n.fit_summary || ""}
 To review this lead in HubSpot:
 ${hubSpotLine}
 
-— Charlton Bleecker Intake System`;
+Charlton Bleecker Intake System`;
 }
 
 /**
@@ -78,8 +78,8 @@ https://www.charltonbleecker.com/`;
  * @param {string} opts.text
  * @param {string} [opts.html]
  * @param {string|string[]} opts.to
- * @param {string} [opts.from] — overrides NOTIFY_FROM_EMAIL / RESEND_FROM_EMAIL when set
- * @param {string|string[]} [opts.replyTo] — Resend `reply_to` (e.g. inbox on root domain while From uses verified subdomain)
+ * @param {string} [opts.from] - overrides NOTIFY_FROM_EMAIL / RESEND_FROM_EMAIL when set
+ * @param {string|string[]} [opts.replyTo] - Resend `reply_to` (e.g. inbox on root domain while From uses verified subdomain)
  */
 export async function sendViaResend(opts) {
   const resendKey = process.env.RESEND_API_KEY;

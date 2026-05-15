@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.charltonbleecker.com"),
   title: "Charlton Bleecker | Private Holding Company",
   description:
-    "Charlton Bleecker acquires and grows enduring B2B businesses — founder-friendly structures, permanent capital, operator-led value creation in Healthcare, Technology, Defense, Professional Services, and Industrials.",
+    "Charlton Bleecker acquires and grows enduring B2B businesses: founder-friendly structures, permanent capital, operator-led value creation in Healthcare, Technology, Defense, Professional Services, and Industrials.",
   openGraph: {
     title: "Charlton Bleecker",
     description: "Acquiring and scaling enduring B2B businesses.",

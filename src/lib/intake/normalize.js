@@ -91,7 +91,7 @@ export function buildAdditionalNotes(body) {
 }
 
 /**
- * n8n financial_notes: EBITDA, Leverage, Key Assets (no revenue line — revenue → company annualrevenue).
+ * n8n financial_notes: EBITDA, Leverage, Key Assets (no revenue line; revenue → company annualrevenue).
  * @param {Record<string, string>} body
  */
 export function buildFinancialNotes(body) {

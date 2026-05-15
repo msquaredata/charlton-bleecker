@@ -5,7 +5,7 @@ export const BLOG_POSTS = [
     date: "January 13, 2026",
     author: "G. Todd Silva",
     excerpt:
-      "Most investors are running funds — optimizing for carry with the fewest people in the shortest time. We're building something different: a firm with compounding competitive advantage as a core objective alongside exceptional returns.",
+      "Most investors are running funds, optimizing for carry with the fewest people in the shortest time. We're building something different: a firm with compounding competitive advantage as a core objective alongside exceptional returns.",
     href: "/blog/firm-gt-fund",
   },
   {
@@ -14,7 +14,7 @@ export const BLOG_POSTS = [
     date: "August 14, 2019",
     author: "G. Todd Silva",
     excerpt:
-      "From misaligned incentives to underdeveloped management teams, these are the ten issues we see most often — and how disciplined operators can address each one before a transaction.",
+      "From misaligned incentives to underdeveloped management teams, these are the ten issues we see most often, and how disciplined operators can address each one before a transaction.",
     href: "/blog/blog-post-four-43xem",
   },
 ] as const;

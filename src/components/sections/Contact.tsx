@@ -30,7 +30,7 @@ export default function Contact() {
         const data = (await res.json().catch(() => ({}))) as { error?: string };
         throw new Error(data.error || "Failed to send");
       }
-      setMsg("Thanks — we received your message.");
+      setMsg("Thanks, we received your message.");
       e.currentTarget.reset();
     } catch (e2: unknown) {
       setErr(e2 instanceof Error ? e2.message : "Something went wrong.");

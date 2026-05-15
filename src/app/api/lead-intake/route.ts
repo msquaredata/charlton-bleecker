@@ -83,7 +83,7 @@ function summarizeHubSpotBody(body: unknown): string {
       if (line) parts.push(String(line));
     }
   }
-  return parts.filter(Boolean).join(" — ");
+  return parts.filter(Boolean).join("; ");
 }
 
 export async function OPTIONS() {
@@ -164,7 +164,7 @@ export async function POST(request: NextRequest) {
 
   if (shouldSkipHubSpot()) {
     console.warn(
-      "lead-intake: HubSpot skipped (LEAD_INTAKE_BYPASS_HUBSPOT). Team + submitter email via Resend — never enable in production.",
+      "lead-intake: HubSpot skipped (LEAD_INTAKE_BYPASS_HUBSPOT). Team + submitter email via Resend; never enable in production.",
     );
     const subject = buildTeamNotifySubject(raw);
     const text = buildTeamNotifyBody(raw, n, "bypass-no-hubspot-deal");

@@ -10,7 +10,7 @@ const POST_BODIES: Record<
     date: "January 13, 2026",
     author: "G. Todd Silva",
     paragraphs: [
-      "Most investors are running funds — optimizing for carry with the fewest people in the shortest time. That model works for a lot of strategies, but it is not the only way to build durable value in private markets.",
+      "Most investors are running funds, optimizing for carry with the fewest people in the shortest time. That model works for a lot of strategies, but it is not the only way to build durable value in private markets.",
       "At Charlton Bleecker, we are building a firm where compounding competitive advantage is a core objective alongside exceptional returns. Permanent capital changes what is possible: longer horizons, fewer conflicts, and a structure aligned with the founders and businesses we partner with.",
       "This is early thinking, published for peers and sellers who care as much about how a deal gets done as the headline number. We will expand on what “firm > fund” means for diligence, governance, and value creation in future posts.",
     ],
@@ -20,7 +20,7 @@ const POST_BODIES: Record<
     date: "August 14, 2019",
     author: "G. Todd Silva",
     paragraphs: [
-      "From misaligned incentives to underdeveloped management teams, certain issues show up repeatedly in engagements — and each can weigh on valuation and certainty of close. A full article treatment is forthcoming; until then, this space summarizes the themes we discuss with operators.",
+      "From misaligned incentives to underdeveloped management teams, certain issues show up repeatedly in engagements, and each can weigh on valuation and certainty of close. A full article treatment is forthcoming; until then, this space summarizes the themes we discuss with operators.",
       "If you are preparing for a transaction, addressing the underlying drivers early usually produces better outcomes than patching the symptoms during diligence. Reach out if you would like a conversation about your situation.",
     ],
   },

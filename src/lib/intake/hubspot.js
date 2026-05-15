@@ -1,5 +1,5 @@
 /**
- * HubSpot CRM — aligned with n8n "Lead Capture - Reactive" HTTP nodes.
+ * HubSpot CRM, aligned with n8n "Lead Capture - Reactive" HTTP nodes.
  * Default associations use v4 PUT `/crm/v4/objects/{from}/.../default/{to}/...` (documented API).
  */
 
@@ -43,7 +43,7 @@ export async function hubspotRequest(token, method, path, body) {
 }
 
 /**
- * v4 default (unlabeled) association — one pair per request (stable path in HubSpot docs).
+ * v4 default (unlabeled) association, one pair per request (stable path in HubSpot docs).
  * @param {string} token
  * @param {'contact'|'company'|'deal'} fromType
  * @param {string} fromId
@@ -132,7 +132,7 @@ export async function searchContactByEmail(token, email) {
   return data?.results?.[0] || null;
 }
 
-/** Property internal names — override via env; defaults match n8n HTTP/HubSpot nodes */
+/** Property internal names; override via env; defaults match n8n HTTP/HubSpot nodes */
 export function propertyNames() {
   return {
     contact: {
@@ -157,7 +157,7 @@ export function propertyNames() {
 }
 
 /**
- * n8n "Create Company" body — extended fields on by default (set HUBSPOT_USE_EXTENDED_COMPANY_PROPS=false to trim).
+ * n8n "Create Company" body, extended fields on by default (set HUBSPOT_USE_EXTENDED_COMPANY_PROPS=false to trim).
  * @param {Record<string, string>} raw
  * @param {object} n
  * @param {string} n.domain
@@ -187,7 +187,7 @@ export function buildCompanyProperties(raw, n) {
 }
 
 /**
- * n8n "Create or update a contact" — submitter_type, additional_notes, hubspot_owner_id.
+ * n8n "Create or update a contact", submitter_type, additional_notes, hubspot_owner_id.
  * @param {Record<string, string>} raw
  * @param {object} n
  * @param {string} n.additional_notes
@@ -213,7 +213,7 @@ export function buildContactProperties(raw, n) {
 }
 
 /**
- * n8n "Create Deal" — description = fit_summary only; same custom props as workflow.
+ * n8n "Create Deal", description = fit_summary only; same custom props as workflow.
  * @param {Record<string, string>} raw
  * @param {object} n
  */

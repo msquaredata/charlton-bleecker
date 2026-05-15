@@ -18,7 +18,7 @@ export default function About() {
           <p className="mt-6 max-w-3xl text-lg leading-relaxed text-[var(--color-muted)]">
             Charlton Bleecker Group LLC is a private holding company focused on
             acquiring and growing enduring scalable B2B businesses. We partner
-            with owner-managers to position companies for long-term success —
+            with owner-managers to position companies for long-term success,
             without fund cycle pressure, LP timelines, or re-trade risk.
             Unlike traditional PE, we hold permanently. Your legacy, your team,
             and your culture remain intact.

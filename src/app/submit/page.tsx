@@ -6,7 +6,7 @@ import Submit from "@/components/sections/Submit";
 export const metadata: Metadata = {
   title: "Submit Your Company | Charlton Bleecker",
   description:
-    "Share a concise overview of your business. Estimates are fine — our team responds within one business day.",
+    "Share a concise overview of your business. Estimates are fine; our team responds within one business day.",
 };
 
 export default function SubmitPage() {

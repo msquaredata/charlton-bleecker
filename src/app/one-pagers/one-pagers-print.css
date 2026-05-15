@@ -1,0 +1,29 @@
+/* Scoped to one-pagers routes via wrapper class in layout. */
+@media print {
+  .one-pagers-shell {
+    background: #fff !important;
+    color: #1a1a1a !important;
+  }
+
+  .one-pagers-shell .one-pagers-header {
+    position: static !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid #e5e5e5;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .one-pagers-shell a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .one-pagers-shell .print-break-before {
+    break-before: page;
+  }
+
+  .one-pagers-shell .one-pager-card {
+    break-inside: avoid;
+    box-shadow: none !important;
+  }
+}

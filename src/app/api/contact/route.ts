@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const subject = `Website contact — ${name}`;
+  const subject = `Website contact: ${name}`;
   const text = `Name: ${name}\nEmail: ${email}\n\n${message}`;
 
   const result = await sendViaResend({

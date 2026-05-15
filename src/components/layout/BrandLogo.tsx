@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
-/** Full-color lockup — white background; works on `bg-[var(--color-bg)]`. */
+/** Full-color lockup, white background; works on `bg-[var(--color-bg)]`. */
 const LOGO_SRC = "/cbg-logo.png";
 
 type BrandLogoProps = {

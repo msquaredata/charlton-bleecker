@@ -60,7 +60,7 @@ export default function Footer() {
             <a
               href="https://www.linkedin.com/in/gtoddsilva/"
               className="mt-3 inline-flex items-center justify-center gap-2 text-sm font-medium leading-normal text-[var(--color-dark)] hover:text-[var(--color-accent)] md:justify-end"
-              aria-label="LinkedIn — G. Todd Silva"
+              aria-label="LinkedIn: G. Todd Silva"
             >
               <Linkedin className="size-5 shrink-0" aria-hidden />
               LinkedIn

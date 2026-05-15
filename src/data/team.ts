@@ -3,7 +3,7 @@ export const TEAM = [
     name: "G. Todd Silva",
     title: "Founder",
     photo: "/images/team/todd-silva.jpg",
-    bio: "Todd has held leadership positions at all seats around the table — investor, banker, entrepreneur, director, and corporate executive. His investment experience spans aerospace & defense, healthcare, technology, industrial manufacturing, and financial services. Earlier in his career, Todd was a founding partner of Candlewood Capital and currently serves as interim CEO/CFO of Radiance Therapeutics and director of ClearSign Technologies (CLIR – NASDAQ).",
+    bio: "Todd has held leadership positions at all seats around the table: investor, banker, entrepreneur, director, and corporate executive. His investment experience spans aerospace & defense, healthcare, technology, industrial manufacturing, and financial services. Earlier in his career, Todd was a founding partner of Candlewood Capital and currently serves as interim CEO/CFO of Radiance Therapeutics and director of ClearSign Technologies (CLIR – NASDAQ).",
     linkedin: "https://www.linkedin.com/in/gtoddsilva/",
     role: "leadership" as const,
   },

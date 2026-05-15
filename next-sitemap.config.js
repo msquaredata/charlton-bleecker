@@ -2,5 +2,5 @@
 module.exports = {
   siteUrl: process.env.SITE_URL || "https://www.charltonbleecker.com",
   generateRobotsTxt: true,
-  exclude: ["/api/*"],
+  exclude: ["/api/*", "/one-pagers", "/one-pagers/*"],
 };
