@@ -10,7 +10,7 @@ export const TEAM = [
   {
     name: "Ed Ristaino",
     title: "Director",
-    photo: "/team/edristano.jpg",
+    photo: "/team/edristaino.jpg",
     bio: "Ed was a partner for 30 years at Akerman LLP and served as lead counsel in hundreds of M&A transactions across healthcare, technology, and professional services. He is currently general counsel, investor, and board member of Cimarron Insurance Company and an investor in Ristaino Hospitality LLC.",
     linkedin: null,
     role: "directors" as const,
