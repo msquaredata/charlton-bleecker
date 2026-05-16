@@ -221,7 +221,7 @@ export default function Submit({ initialOptions }: SubmitProps) {
     "mt-1 w-full rounded-md border border-white/20 bg-white/10 px-3 py-2 text-sm text-white placeholder-white/40 focus:border-[var(--color-accent)] focus:outline-none";
 
   return (
-    <section id="submit" className="section-pad bg-[var(--color-dark)] text-white">
+    <section id="submit" className="pb-24 bg-[var(--color-dark)] text-white">
       <div className="container-site max-w-3xl">
         <FadeUp>
           <p className="text-xs font-semibold uppercase tracking-widest text-[var(--color-accent)]">

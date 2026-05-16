@@ -16,7 +16,7 @@ export default function SubmitPage() {
   return (
     <>
       <Navbar />
-      <main className="pt-24 md:pt-28">
+      <main className="min-h-[100svh] bg-[var(--color-dark)] pt-24 text-white md:pt-28">
         <Submit initialOptions={formOptions} />
       </main>
       <Footer />
