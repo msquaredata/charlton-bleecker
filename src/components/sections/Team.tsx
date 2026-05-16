@@ -148,7 +148,7 @@ export default function Team() {
           <h3 className="font-display text-lg font-semibold text-[var(--color-dark)]">
             Directors
           </h3>
-          <div className="mt-6 grid items-stretch gap-8 md:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-6 grid grid-cols-1 items-stretch gap-8 sm:grid-cols-2">
             {directors.map((m, i) => (
               <MemberCard key={m.name} member={m} delay={i * 0.06} />
             ))}

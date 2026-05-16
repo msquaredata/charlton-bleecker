@@ -2,7 +2,7 @@ export const TEAM = [
   {
     name: "G. Todd Silva",
     title: "Founder",
-    photo: "/images/team/todd-silva.jpg",
+    photo: "/team/gtoddsilva.jpg",
     bio: "Todd has held leadership positions at all seats around the table: investor, banker, entrepreneur, director, and corporate executive. His investment experience spans aerospace & defense, healthcare, technology, industrial manufacturing, and financial services. Earlier in his career, Todd was a founding partner of Candlewood Capital and currently serves as interim CEO/CFO of Radiance Therapeutics and director of ClearSign Technologies (CLIR – NASDAQ).",
     linkedin: "https://www.linkedin.com/in/gtoddsilva/",
     role: "leadership" as const,
@@ -10,7 +10,7 @@ export const TEAM = [
   {
     name: "Ed Ristaino",
     title: "Director",
-    photo: "/images/team/ed-ristaino.jpg",
+    photo: "/team/edristano.jpg",
     bio: "Ed was a partner for 30 years at Akerman LLP and served as lead counsel in hundreds of M&A transactions across healthcare, technology, and professional services. He is currently general counsel, investor, and board member of Cimarron Insurance Company and an investor in Ristaino Hospitality LLC.",
     linkedin: null,
     role: "directors" as const,
@@ -18,7 +18,7 @@ export const TEAM = [
   {
     name: "L. Tracy Silva, MD",
     title: "Director",
-    photo: "/images/team/tracy-silva.jpg",
+    photo: "/team/ltracysilva.jpg",
     bio: "Dr. Silva is a board-certified physician in internal medicine in private practice since 2000 and a Member of the American College of Physicians. She has served as a preceptor at Columbia University College of Physicians and Surgeons. She has been recognized by Castle Connolly Top Doctors Awards including Exceptional Women in Medicine (2020–present).",
     linkedin: null,
     role: "directors" as const,
@@ -26,7 +26,7 @@ export const TEAM = [
   {
     name: "Michael Milian",
     title: "Director",
-    photo: "/images/team/michael-milian.jpg",
+    photo: "/team/michaelmilian.jpg",
     bio: "Michael is a technology and operations strategist with 20+ years of experience across healthcare, consumer goods, and manufacturing. His background includes roles at IBM, Hewlett-Packard, Bacardi, and Costa Farms, and he leads mSquare Solutions, his technology advisory consultancy.",
     linkedin: "https://www.linkedin.com/in/michael-milian-243b831/",
     role: "directors" as const,
@@ -34,7 +34,7 @@ export const TEAM = [
   {
     name: "John Rohan, CPA",
     title: "Director",
-    photo: "/images/team/john-rohan.jpg",
+    photo: "/team/johnrohan.jpg",
     bio: "John has 20+ years of US GAAP and SEC experience advising public and private clients in complex accounting areas. He started at BDO USA as Senior Manager and later held senior accounting roles at MDC Partners, Monster Worldwide, and GT Nexus.",
     linkedin: "https://www.linkedin.com/in/john-rohan-cpa-9347933/",
     role: "directors" as const,
