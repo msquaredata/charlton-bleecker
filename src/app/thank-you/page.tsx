@@ -1,9 +1,19 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect } from "react";
+import { isEmbeddedFrame } from "@/lib/intake/is-embedded";
 
 export default function ThankYouPage() {
+  useEffect(() => {
+    if (!isEmbeddedFrame()) return;
+    document.body.classList.add("embedded");
+    return () => document.body.classList.remove("embedded");
+  }, []);
+
   return (
-    <main className="min-h-[100svh] bg-[var(--color-surface)] px-4 py-24">
-      <div className="container-site max-w-xl text-center">
+    <main className="thankyou-main min-h-[100svh] bg-[var(--color-surface)] px-4 py-24">
+      <div className="thankyou-content container-site max-w-xl text-center">
         <h1 className="font-display text-4xl font-semibold text-[var(--color-dark)]">
           Thank you
         </h1>

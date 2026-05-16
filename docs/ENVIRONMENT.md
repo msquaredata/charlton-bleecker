@@ -17,6 +17,7 @@ Documented from the legacy intake app. Copy values into **root** `.env.local` fo
 | `NOTIFY_FROM_EMAIL` | Verified From address |
 | `LEAD_INTAKE_SEND_SUBMITTER_EMAIL` | `false` to disable thank-you email |
 | `THANK_YOU_REDIRECT` | Path after success (use `/thank-you` for Next) |
+| `NEXT_PUBLIC_LEAD_INTAKE_API_URL` | Optional API host when form is embedded cross-origin |
 | `CORS_ALLOW_ORIGIN` | CORS for API |
 | `LEAD_INTAKE_DEBUG` | `1` to expose HubSpot hints |
 | `HUBSPOT_USE_EXTENDED_*` | Optional property toggles |

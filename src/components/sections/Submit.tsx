@@ -1,84 +1,29 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import FadeUp from "@/components/ui/FadeUp";
-import { US_STATES } from "@/data/us-states";
+import LeadFormDevFixtures from "@/components/intake/LeadFormDevFixtures";
+import SubmitThankYouInline from "@/components/intake/SubmitThankYouInline";
+import { useLeadFormOptions } from "@/hooks/useLeadFormOptions";
+import type { FormOptionKey } from "@/lib/intake/form-option-sources";
+import type { FormOption } from "@/lib/intake/parse-form-options-csv";
 
-const KEY_ASSETS = [
-  "Contracts",
-  "Equipment",
-  "Goodwill/Brand",
-  "IP/Patents",
-  "Real Estate",
-  "Team",
-  "Technology",
-  "Other",
-] as const;
-
-const CHALLENGES = [
-  "Succession Planning",
-  "Excessive Debt",
-  "Need Growth Capital",
-  "Operational Efficiency",
-  "Market Pressure/Competition",
-  "Overdue Bills",
-  "Other",
-] as const;
-
-const ROLES = [
-  "Owner",
-  "Accountant",
-  "Advisor",
-  "Attorney",
-  "Broker",
-  "Executive",
-  "Other",
-] as const;
-
-const OWNERSHIP = [
-  "Founder/Family-Owned",
-  "Partnership",
-  "Private Company",
-  "PE-Backed",
-  "Other",
-] as const;
-
-const GOALS = [
-  "Exit",
-  "Growth Capital",
-  "Partial Sale/Recap",
-  "Strategic Partnership",
-] as const;
-
-const TIMING = ["Immediate", "< 12 months", "1–3 years", "3+ years"] as const;
-
-const REVENUE = [
-  "< $2M",
-  "$2–5M",
-  "$5–10M",
-  "$10–25M",
-  "$25M+",
-] as const;
-
-const EBITDA = [
-  "Negative",
-  "< 5%",
-  "5–10%",
-  "10–20%",
-  "20%+",
-] as const;
-
-const LEVERAGE = [
-  "None",
-  "Manageable",
-  "Heavily Leveraged",
-  "Prefer not to say",
-] as const;
-
-const REFERRAL = ["Referral", "Website", "Event", "Other"] as const;
-
-type IndustryOpt = { label: string; value: string };
+export type SubmitProps = {
+  /** Preloaded from CSV on the server so dropdowns are populated on first paint. */
+  initialOptions?: Record<FormOptionKey, FormOption[]>;
+};
+import {
+  CHALLENGES,
+  KEY_ASSETS,
+  PHONE_PATTERN,
+  WEBSITE_PATTERN,
+} from "@/lib/intake/lead-form-options";
+import { isEmbeddedFrame } from "@/lib/intake/is-embedded";
+import {
+  leadIntakeApiUrl,
+  normalizeThankYouRedirect,
+} from "@/lib/intake/normalize-redirect";
 
 function FieldLabel({
   htmlFor,
@@ -150,40 +95,70 @@ function MultiToggle({
   );
 }
 
-export default function Submit() {
+function OptionsSelect({
+  optionKey,
+  id,
+  name,
+  label,
+  required,
+  placeholder,
+  options,
+  loadError,
+  defaultValue = "",
+  inputClass,
+}: {
+  optionKey: FormOptionKey;
+  id: string;
+  name: string;
+  label: React.ReactNode;
+  required?: boolean;
+  placeholder: string;
+  options: FormOption[];
+  loadError?: string;
+  defaultValue?: string;
+  inputClass: string;
+}) {
+  const loading = !options.length && !loadError;
+  return (
+    <div>
+      <FieldLabel htmlFor={id} required={required}>
+        {label}
+      </FieldLabel>
+      <select
+        key={`${id}-${options.length}-${loadError ?? ""}`}
+        id={id}
+        name={name}
+        required={required}
+        defaultValue={defaultValue}
+        disabled={loading && Boolean(required)}
+        className={`${inputClass} [&>option]:bg-white [&>option]:text-[#1a1a1a]`}
+        data-option-key={optionKey}
+      >
+        {required ? (
+          <option value="" disabled>
+            {loadError ||
+              (options.length ? placeholder : "Loading options...")}
+          </option>
+        ) : null}
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>
+            {o.label}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}
+
+export default function Submit({ initialOptions }: SubmitProps) {
   const router = useRouter();
-  const [industries, setIndustries] = useState<IndustryOpt[]>([]);
-  const [loadIndErr, setLoadIndErr] = useState<string | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+  const { options, errors } = useLeadFormOptions(initialOptions);
   const [keyassets, setKeyassets] = useState<string[]>([]);
   const [challenge, setChallenge] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const res = await fetch("/assets/data/industries.csv");
-        if (!res.ok) throw new Error(String(res.status));
-        const text = await res.text();
-        const lines = text.trim().split("\n").slice(1);
-        const parsed: IndustryOpt[] = [];
-        for (const line of lines) {
-          const parts = line.split(",").map((p) => p.trim());
-          const label = parts[0];
-          const value = parts[1];
-          const active = parts[2]?.toUpperCase();
-          if (active === "Y" && label && value) parsed.push({ label, value });
-        }
-        if (!cancelled) setIndustries(parsed);
-      } catch {
-        if (!cancelled) setLoadIndErr("Could not load industries.");
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const [showInlineThankYou, setShowInlineThankYou] = useState(false);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -197,8 +172,6 @@ export default function Submit() {
       fd.set("website", `https://${website}`);
     }
 
-    fd.set("keyassets", keyassets.join(", "));
-    fd.set("challenge", challenge.join(", "));
     if (!(form.elements.namedItem("hasManagementTeam") as HTMLInputElement)
       ?.checked) {
       fd.delete("hasManagementTeam");
@@ -207,7 +180,7 @@ export default function Submit() {
     }
 
     try {
-      const res = await fetch("/api/lead-intake", {
+      const res = await fetch(leadIntakeApiUrl(), {
         method: "POST",
         body: fd,
       });
@@ -220,13 +193,17 @@ export default function Submit() {
       };
 
       if (res.ok && data.status === "received") {
-        const r = data.redirect || "/thank-you";
-        const path = r.startsWith("/") ? r : `/${r}`;
-        router.push(path === "/thank-you.html" ? "/thank-you" : path);
+        const path = normalizeThankYouRedirect(data.redirect);
+        if (isEmbeddedFrame()) {
+          setShowInlineThankYou(true);
+          formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+        } else {
+          window.setTimeout(() => router.push(path), 800);
+        }
         return;
       }
 
-      let msg = data.error || "Submission failed.";
+      let msg = data.error || "Submission failed. Please try again.";
       if (Array.isArray(data.fields) && data.fields.length) {
         msg += ` Missing: ${data.fields.join(", ")}.`;
       } else if (data.hint) {
@@ -234,7 +211,7 @@ export default function Submit() {
       }
       setErrorMsg(msg);
     } catch {
-      setErrorMsg("Network error. Please try again.");
+      setErrorMsg("Unable to connect to the server. Please try again later.");
     } finally {
       setSubmitting(false);
     }
@@ -259,7 +236,18 @@ export default function Submit() {
           </p>
         </FadeUp>
         <FadeUp delay={0.08}>
-          <form className="mt-10 space-y-12" onSubmit={onSubmit} noValidate>
+          {showInlineThankYou ? (
+            <SubmitThankYouInline />
+          ) : (
+          <form
+            ref={formRef}
+            id="leadForm"
+            className="mt-10 space-y-12"
+            onSubmit={onSubmit}
+            noValidate
+          >
+            <input type="hidden" name="keyassets" value={keyassets.join(", ")} />
+            <input type="hidden" name="challenge" value={challenge.join(", ")} />
             {errorMsg ? (
               <div
                 role="alert"
@@ -273,11 +261,11 @@ export default function Submit() {
               <h3 className="font-display text-lg font-semibold">1 · Contact</h3>
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 <div>
-                  <FieldLabel htmlFor="firstName" required>
+                  <FieldLabel htmlFor="firstNameInput" required>
                     First name
                   </FieldLabel>
                   <input
-                    id="firstName"
+                    id="firstNameInput"
                     name="firstName"
                     required
                     autoComplete="given-name"
@@ -285,11 +273,11 @@ export default function Submit() {
                   />
                 </div>
                 <div>
-                  <FieldLabel htmlFor="lastName" required>
+                  <FieldLabel htmlFor="lastNameInput" required>
                     Last name
                   </FieldLabel>
                   <input
-                    id="lastName"
+                    id="lastNameInput"
                     name="lastName"
                     required
                     autoComplete="family-name"
@@ -297,32 +285,24 @@ export default function Submit() {
                   />
                 </div>
                 <div className="sm:col-span-2">
-                  <FieldLabel htmlFor="role" required>
-                    Role / relationship
-                  </FieldLabel>
-                  <select
-                    id="role"
+                  <OptionsSelect
+                    optionKey="role"
+                    id="roleSelect"
                     name="role"
+                    label="Role / relationship"
                     required
-                    defaultValue=""
-                    className={inputClass}
-                  >
-                    <option value="" disabled>
-                      Select role
-                    </option>
-                    {ROLES.map((r) => (
-                      <option key={r} value={r}>
-                        {r}
-                      </option>
-                    ))}
-                  </select>
+                    placeholder="Select role"
+                    options={options.role}
+                    loadError={errors.role}
+                    inputClass={inputClass}
+                  />
                 </div>
                 <div className="sm:col-span-2">
-                  <FieldLabel htmlFor="email" required>
+                  <FieldLabel htmlFor="emailInput" required>
                     Email
                   </FieldLabel>
                   <input
-                    id="email"
+                    id="emailInput"
                     name="email"
                     type="email"
                     required
@@ -331,26 +311,26 @@ export default function Submit() {
                   />
                 </div>
                 <div className="sm:col-span-2">
-                  <FieldLabel htmlFor="phone" required>
+                  <FieldLabel htmlFor="phoneInput" required>
                     Phone
                   </FieldLabel>
                   <input
-                    id="phone"
+                    id="phoneInput"
                     name="phone"
                     type="tel"
                     required
-                    pattern="^(\+?1-)?\d{3}-\d{3}-\d{4}$"
-                    title="XXX-XXX-XXXX or +1-XXX-XXX-XXXX"
+                    pattern={PHONE_PATTERN}
+                    title="Please enter a phone number in the format XXX-XXX-XXXX, optionally including the country code (e.g., +1-555-000-1234)."
                     placeholder="+1-555-000-1234"
                     className={inputClass}
                   />
                 </div>
                 <div className="sm:col-span-2">
-                  <FieldLabel htmlFor="companyRepresented">
+                  <FieldLabel htmlFor="companyRepresentedInput">
                     Company represented (if not owner)
                   </FieldLabel>
                   <input
-                    id="companyRepresented"
+                    id="companyRepresentedInput"
                     name="companyRepresented"
                     className={inputClass}
                   />
@@ -364,89 +344,77 @@ export default function Submit() {
               </h3>
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 <div className="sm:col-span-2">
-                  <FieldLabel htmlFor="businessName" required>
+                  <FieldLabel htmlFor="businessNameInput" required>
                     Business name
                   </FieldLabel>
                   <input
-                    id="businessName"
+                    id="businessNameInput"
                     name="businessName"
                     required
                     className={inputClass}
                   />
                 </div>
                 <div className="sm:col-span-2">
-                  <FieldLabel htmlFor="website" required>
+                  <FieldLabel htmlFor="websiteInput" required>
                     Website
                   </FieldLabel>
                   <input
-                    id="website"
+                    id="websiteInput"
                     name="website"
                     required
                     placeholder="www.example.com"
+                    pattern={WEBSITE_PATTERN}
+                    title="Please enter a valid website URL (e.g., www.example.com or example.com)"
                     className={inputClass}
                   />
                 </div>
                 <div className="sm:col-span-2">
-                  <FieldLabel htmlFor="industry" required>
-                    Industry / sector
-                  </FieldLabel>
-                  <select
-                    id="industry"
+                  <OptionsSelect
+                    optionKey="industry"
+                    id="industrySelect"
                     name="industry"
+                    label="Industry / sector"
                     required
-                    defaultValue=""
-                    className={inputClass}
-                    disabled={!industries.length && !loadIndErr}
-                  >
-                    <option value="" disabled>
-                      {loadIndErr
-                        ? loadIndErr
-                        : industries.length
-                          ? "Select industry"
-                          : "Loading…"}
-                    </option>
-                    {industries.map((i) => (
-                      <option key={i.value} value={i.value}>
-                        {i.label}
-                      </option>
-                    ))}
-                  </select>
+                    placeholder="Select an option..."
+                    options={options.industry}
+                    loadError={errors.industry}
+                    inputClass={inputClass}
+                  />
                 </div>
                 <div>
-                  <FieldLabel htmlFor="hqCity" required>
+                  <FieldLabel htmlFor="hqCityInput" required>
                     HQ city
                   </FieldLabel>
-                  <input id="hqCity" name="hqCity" required className={inputClass} />
-                </div>
-                <div>
-                  <FieldLabel htmlFor="hqState" required>
-                    HQ state
-                  </FieldLabel>
-                  <select
-                    id="hqState"
-                    name="hqState"
-                    required
-                    defaultValue=""
-                    className={inputClass}
-                  >
-                    <option value="" disabled>
-                      Select state
-                    </option>
-                    {US_STATES.map((s) => (
-                      <option key={s.code} value={s.code}>
-                        {s.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <FieldLabel htmlFor="yearFounded">Year founded</FieldLabel>
                   <input
-                    id="yearFounded"
+                    id="hqCityInput"
+                    name="hqCity"
+                    required
+                    className={inputClass}
+                  />
+                </div>
+                <div>
+                  <OptionsSelect
+                    optionKey="hqState"
+                    id="hqStateSelect"
+                    name="hqState"
+                    label="HQ state"
+                    required
+                    placeholder="Select state"
+                    options={options.hqState}
+                    loadError={errors.hqState}
+                    inputClass={inputClass}
+                  />
+                </div>
+                <div>
+                  <FieldLabel htmlFor="yearFoundedInput">Year founded</FieldLabel>
+                  <input
+                    id="yearFoundedInput"
                     name="yearFounded"
                     type="number"
                     min={1800}
                     max={2100}
+                    pattern="\d{4}"
+                    title="Please enter a four-digit year (e.g., 1998)."
                     className={inputClass}
                   />
                 </div>
@@ -459,67 +427,43 @@ export default function Submit() {
               </h3>
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 <div className="sm:col-span-2">
-                  <FieldLabel htmlFor="ownership" required>
-                    Current ownership
-                  </FieldLabel>
-                  <select
-                    id="ownership"
+                  <OptionsSelect
+                    optionKey="ownership"
+                    id="ownershipSelect"
                     name="ownership"
+                    label="Current ownership"
                     required
-                    defaultValue=""
-                    className={inputClass}
-                  >
-                    <option value="" disabled>
-                      Select type
-                    </option>
-                    {OWNERSHIP.map((o) => (
-                      <option key={o} value={o}>
-                        {o}
-                      </option>
-                    ))}
-                  </select>
+                    placeholder="Select type"
+                    options={options.ownership}
+                    loadError={errors.ownership}
+                    inputClass={inputClass}
+                  />
                 </div>
                 <div className="sm:col-span-2">
-                  <FieldLabel htmlFor="transitionGoal" required>
-                    Transaction goal
-                  </FieldLabel>
-                  <select
-                    id="transitionGoal"
+                  <OptionsSelect
+                    optionKey="transitionGoal"
+                    id="transitionGoalSelect"
                     name="transitionGoal"
+                    label="Transaction goal"
                     required
-                    defaultValue=""
-                    className={inputClass}
-                  >
-                    <option value="" disabled>
-                      Select goal
-                    </option>
-                    {GOALS.map((g) => (
-                      <option key={g} value={g}>
-                        {g}
-                      </option>
-                    ))}
-                  </select>
+                    placeholder="Select goal"
+                    options={options.transitionGoal}
+                    loadError={errors.transitionGoal}
+                    inputClass={inputClass}
+                  />
                 </div>
                 <div className="sm:col-span-2">
-                  <FieldLabel htmlFor="transitionTiming" required>
-                    Transaction timing
-                  </FieldLabel>
-                  <select
-                    id="transitionTiming"
+                  <OptionsSelect
+                    optionKey="transitionTiming"
+                    id="transitionTimingSelect"
                     name="transitionTiming"
+                    label="Transaction timing"
                     required
-                    defaultValue=""
-                    className={inputClass}
-                  >
-                    <option value="" disabled>
-                      Select timing
-                    </option>
-                    {TIMING.map((t) => (
-                      <option key={t} value={t}>
-                        {t}
-                      </option>
-                    ))}
-                  </select>
+                    placeholder="Select timing"
+                    options={options.transitionTiming}
+                    loadError={errors.transitionTiming}
+                    inputClass={inputClass}
+                  />
                 </div>
               </div>
             </div>
@@ -530,67 +474,43 @@ export default function Submit() {
               </h3>
               <div className="mt-4 grid gap-4 sm:grid-cols-3">
                 <div className="sm:col-span-3 md:col-span-1">
-                  <FieldLabel htmlFor="revenueRangeText" required>
-                    Annual revenue
-                  </FieldLabel>
-                  <select
-                    id="revenueRangeText"
+                  <OptionsSelect
+                    optionKey="revenueRangeText"
+                    id="revenueRangeTextSelect"
                     name="revenueRangeText"
+                    label="Annual revenue"
                     required
-                    defaultValue=""
-                    className={inputClass}
-                  >
-                    <option value="" disabled>
-                      Select range
-                    </option>
-                    {REVENUE.map((r) => (
-                      <option key={r} value={r}>
-                        {r}
-                      </option>
-                    ))}
-                  </select>
+                    placeholder="Select range"
+                    options={options.revenueRangeText}
+                    loadError={errors.revenueRangeText}
+                    inputClass={inputClass}
+                  />
                 </div>
                 <div className="sm:col-span-3 md:col-span-1">
-                  <FieldLabel htmlFor="ebitdaMargin" required>
-                    EBITDA margin
-                  </FieldLabel>
-                  <select
-                    id="ebitdaMargin"
+                  <OptionsSelect
+                    optionKey="ebitdaMargin"
+                    id="ebitdaMarginSelect"
                     name="ebitdaMargin"
+                    label="EBITDA margin"
                     required
-                    defaultValue=""
-                    className={inputClass}
-                  >
-                    <option value="" disabled>
-                      Select margin
-                    </option>
-                    {EBITDA.map((r) => (
-                      <option key={r} value={r}>
-                        {r}
-                      </option>
-                    ))}
-                  </select>
+                    placeholder="Select margin"
+                    options={options.ebitdaMargin}
+                    loadError={errors.ebitdaMargin}
+                    inputClass={inputClass}
+                  />
                 </div>
                 <div className="sm:col-span-3 md:col-span-1">
-                  <FieldLabel htmlFor="leverage" required>
-                    Debt / leverage
-                  </FieldLabel>
-                  <select
-                    id="leverage"
+                  <OptionsSelect
+                    optionKey="leverage"
+                    id="leverageSelect"
                     name="leverage"
+                    label="Debt / leverage"
                     required
-                    defaultValue=""
-                    className={inputClass}
-                  >
-                    <option value="" disabled>
-                      Select status
-                    </option>
-                    {LEVERAGE.map((r) => (
-                      <option key={r} value={r}>
-                        {r}
-                      </option>
-                    ))}
-                  </select>
+                    placeholder="Select status"
+                    options={options.leverage}
+                    loadError={errors.leverage}
+                    inputClass={inputClass}
+                  />
                 </div>
                 <div className="sm:col-span-3">
                   <MultiToggle
@@ -602,11 +522,11 @@ export default function Submit() {
                   />
                 </div>
                 <div className="sm:col-span-3">
-                  <FieldLabel htmlFor="notableCustomers">
+                  <FieldLabel htmlFor="notableCustomersInput">
                     Notable customers or contracts
                   </FieldLabel>
                   <textarea
-                    id="notableCustomers"
+                    id="notableCustomersInput"
                     name="notableCustomers"
                     rows={3}
                     className={inputClass}
@@ -621,11 +541,11 @@ export default function Submit() {
               </h3>
               <div className="mt-4 grid gap-4">
                 <div>
-                  <FieldLabel htmlFor="fitReason">
+                  <FieldLabel htmlFor="fitReasonInput">
                     Why is this a strong fit for Charlton Bleecker?
                   </FieldLabel>
                   <textarea
-                    id="fitReason"
+                    id="fitReasonInput"
                     name="fitReason"
                     rows={4}
                     className={inputClass}
@@ -640,13 +560,13 @@ export default function Submit() {
                 />
                 <div className="flex items-start gap-2">
                   <input
-                    id="hasManagementTeam"
+                    id="hasManagementTeamCheckbox"
                     name="hasManagementTeam"
                     type="checkbox"
                     className="mt-1 size-4 rounded border-white/30"
                   />
                   <label
-                    htmlFor="hasManagementTeam"
+                    htmlFor="hasManagementTeamCheckbox"
                     className="text-sm text-white/85"
                   >
                     Experienced management team in place
@@ -661,26 +581,24 @@ export default function Submit() {
               </h3>
               <div className="mt-4 grid gap-4">
                 <div>
-                  <FieldLabel htmlFor="referralSource">
-                    How did you hear about us?
-                  </FieldLabel>
-                  <select
-                    id="referralSource"
+                  <OptionsSelect
+                    optionKey="referralSource"
+                    id="referralSourceSelect"
                     name="referralSource"
-                    defaultValue={REFERRAL[0]}
-                    className={inputClass}
-                  >
-                    {REFERRAL.map((r) => (
-                      <option key={r} value={r}>
-                        {r}
-                      </option>
-                    ))}
-                  </select>
+                    label="How did you hear about us?"
+                    placeholder="Select source"
+                    options={options.referralSource}
+                    loadError={errors.referralSource}
+                    defaultValue={
+                      options.referralSource[0]?.value ?? "Referral"
+                    }
+                    inputClass={inputClass}
+                  />
                 </div>
                 <div>
-                  <FieldLabel htmlFor="otherDetails">Other details</FieldLabel>
+                  <FieldLabel htmlFor="otherDetailsInput">Other detail</FieldLabel>
                   <textarea
-                    id="otherDetails"
+                    id="otherDetailsInput"
                     name="otherDetails"
                     rows={3}
                     className={inputClass}
@@ -699,12 +617,23 @@ export default function Submit() {
                 disabled={submitting}
                 className="inline-flex min-h-12 min-w-[160px] items-center justify-center rounded-sm bg-[var(--color-accent)] px-8 font-semibold text-white hover:bg-[var(--color-accent-hover)] disabled:opacity-60"
               >
-                {submitting ? "Submitting…" : "Submit"}
+                {submitting ? "Submitting..." : "Submit"}
               </button>
             </div>
           </form>
+          )}
         </FadeUp>
+        <LeadFormDevFixtures
+          industriesReady={options.industry.length > 0}
+          onApplyKeyassets={setKeyassets}
+          onApplyChallenge={setChallenge}
+          onClearMultiselects={() => {
+            setKeyassets([]);
+            setChallenge([]);
+          }}
+        />
       </div>
     </section>
   );
 }
+

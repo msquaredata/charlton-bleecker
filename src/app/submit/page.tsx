@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Submit from "@/components/sections/Submit";
+import { loadFormOptionsFromDisk } from "@/lib/intake/load-form-options-server";
 
 export const metadata: Metadata = {
   title: "Submit Your Company | Charlton Bleecker",
@@ -10,11 +11,13 @@ export const metadata: Metadata = {
 };
 
 export default function SubmitPage() {
+  const formOptions = loadFormOptionsFromDisk();
+
   return (
     <>
       <Navbar />
       <main className="pt-24 md:pt-28">
-        <Submit />
+        <Submit initialOptions={formOptions} />
       </main>
       <Footer />
     </>

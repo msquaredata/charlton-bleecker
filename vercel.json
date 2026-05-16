@@ -6,6 +6,11 @@
       "permanent": true
     },
     {
+      "source": "/thank-you.html",
+      "destination": "/thank-you",
+      "permanent": true
+    },
+    {
       "source": "/aboutus",
       "destination": "/#about",
       "permanent": true
