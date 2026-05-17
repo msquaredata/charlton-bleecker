@@ -188,7 +188,7 @@ function MemberCard({
 }: {
   member: (typeof TEAM)[number];
   delay: number;
-  onOpenPhoto: (photo: TeamPhotoLightbox & { returnFocus?: () => void }) => void;
+  onOpenPhoto: (photo: TeamPhotoLightbox) => void;
 }) {
   return (
     <FadeUp delay={delay} className="h-full min-h-0">
@@ -226,10 +226,12 @@ export default function Team() {
   const leaders = TEAM.filter((m) => m.role === "leadership");
   const directors = TEAM.filter((m) => m.role === "directors");
   const [lightbox, setLightbox] = useState<TeamPhotoLightbox | null>(null);
+  const returnFocusRef = useRef<(() => void) | null>(null);
   const isClient = useIsClient();
 
   const openPhoto = useCallback((photo: TeamPhotoLightbox) => {
     lockBodyScroll();
+    returnFocusRef.current = photo.returnFocus ?? null;
     setLightbox(photo);
   }, []);
 
@@ -237,8 +239,11 @@ export default function Team() {
 
   const handleLightboxExit = useCallback(() => {
     unlockBodyScroll();
-    lightbox?.returnFocus?.();
-  }, [lightbox]);
+    returnFocusRef.current?.();
+    returnFocusRef.current = null;
+  }, []);
+
+  useEffect(() => () => unlockBodyScroll(), []);
 
   return (
     <section id="team" className="section-pad bg-[var(--color-surface)]">
