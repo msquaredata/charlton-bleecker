@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 type TeamPhotoLightbox = {
   src: string;
   name: string;
+  returnFocus?: () => void;
 };
 
 function lockBodyScroll() {
@@ -154,10 +155,18 @@ function MemberAvatar({
   return (
     <>
       <button
+        ref={triggerRef}
         type="button"
         className="group relative size-28 shrink-0 cursor-zoom-in overflow-hidden rounded-full bg-[var(--color-surface)] ring-1 ring-black/5 transition-shadow hover:ring-[var(--color-accent)]/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
         aria-label={`View larger photo of ${member.name}`}
-        onClick={() => setZoomOpen(true)}
+        onClick={() =>
+          onOpenPhoto({
+            src,
+            name: member.name,
+            returnFocus: () =>
+              triggerRef.current?.focus({ preventScroll: true }),
+          })
+        }
       >
         <Image
           src={src}
@@ -168,21 +177,6 @@ function MemberAvatar({
           onError={() => setFailCount((n) => n + 1)}
         />
       </button>
-      {isClient
-        ? createPortal(
-            <AnimatePresence>
-              {zoomOpen ? (
-                <AvatarLightbox
-                  key={member.name}
-                  src={src}
-                  name={member.name}
-                  onClose={closeLightbox}
-                />
-              ) : null}
-            </AnimatePresence>,
-            document.body,
-          )
-        : null}
     </>
   );
 }
@@ -190,14 +184,16 @@ function MemberAvatar({
 function MemberCard({
   member,
   delay,
+  onOpenPhoto,
 }: {
   member: (typeof TEAM)[number];
   delay: number;
+  onOpenPhoto: (photo: TeamPhotoLightbox & { returnFocus?: () => void }) => void;
 }) {
   return (
     <FadeUp delay={delay} className="h-full min-h-0">
       <article className="flex h-full min-h-0 flex-col items-center rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] p-8 text-center shadow-sm">
-        <MemberAvatar member={member} />
+        <MemberAvatar member={member} onOpenPhoto={onOpenPhoto} />
         <h3 className="mt-5 font-display text-xl font-semibold text-[var(--color-dark)]">
           {member.name}
         </h3>
@@ -229,9 +225,38 @@ function MemberCard({
 export default function Team() {
   const leaders = TEAM.filter((m) => m.role === "leadership");
   const directors = TEAM.filter((m) => m.role === "directors");
+  const [lightbox, setLightbox] = useState<TeamPhotoLightbox | null>(null);
+  const isClient = useIsClient();
+
+  const openPhoto = useCallback((photo: TeamPhotoLightbox) => {
+    lockBodyScroll();
+    setLightbox(photo);
+  }, []);
+
+  const closePhoto = useCallback(() => setLightbox(null), []);
+
+  const handleLightboxExit = useCallback(() => {
+    unlockBodyScroll();
+    lightbox?.returnFocus?.();
+  }, [lightbox]);
 
   return (
     <section id="team" className="section-pad bg-[var(--color-surface)]">
+      {isClient
+        ? createPortal(
+            <AnimatePresence onExitComplete={handleLightboxExit}>
+              {lightbox ? (
+                <AvatarLightbox
+                  key={lightbox.name}
+                  src={lightbox.src}
+                  name={lightbox.name}
+                  onClose={closePhoto}
+                />
+              ) : null}
+            </AnimatePresence>,
+            document.body,
+          )
+        : null}
       <div className="container-site">
         <FadeUp>
           <p className="text-xs font-semibold uppercase tracking-widest text-[var(--color-accent)]">
@@ -254,7 +279,12 @@ export default function Team() {
             )}
           >
             {leaders.map((m, i) => (
-              <MemberCard key={m.name} member={m} delay={i * 0.08} />
+              <MemberCard
+                key={m.name}
+                member={m}
+                delay={i * 0.08}
+                onOpenPhoto={openPhoto}
+              />
             ))}
           </div>
         </div>
@@ -264,7 +294,12 @@ export default function Team() {
           </h3>
           <div className="mt-6 grid grid-cols-1 items-stretch gap-8 sm:grid-cols-2">
             {directors.map((m, i) => (
-              <MemberCard key={m.name} member={m} delay={i * 0.06} />
+              <MemberCard
+                key={m.name}
+                member={m}
+                delay={i * 0.06}
+                onOpenPhoto={openPhoto}
+              />
             ))}
           </div>
         </div>
