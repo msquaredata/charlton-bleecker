@@ -1,11 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
-import { Linkedin } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { Linkedin, X } from "lucide-react";
 import FadeUp from "@/components/ui/FadeUp";
 import { TEAM } from "@/data/team";
 import { linkedInUnavatarSrc } from "@/lib/linkedin-avatar";
+import { useIsClient } from "@/lib/use-is-client";
 import { cn } from "@/lib/utils";
 
 function initials(name: string) {
@@ -39,12 +42,89 @@ function Bio({ text }: { text: string }) {
   );
 }
 
+function AvatarLightbox({
+  src,
+  name,
+  onClose,
+}: {
+  src: string;
+  name: string;
+  onClose: () => void;
+}) {
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    closeRef.current?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [onClose]);
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${name} photo`}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+    >
+      <button
+        type="button"
+        className="absolute inset-0 bg-black/70"
+        aria-label="Close photo"
+        onClick={onClose}
+      />
+      <motion.figure
+        className="relative z-10"
+        initial={{ scale: 0.92, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.92, opacity: 0 }}
+        transition={{ duration: 0.25, ease: "easeOut" }}
+      >
+        <motion.div className="relative aspect-[4/5] h-[min(85vh,42rem)] max-w-[92vw] overflow-hidden rounded-2xl shadow-2xl ring-1 ring-white/10">
+          <Image
+            src={src}
+            alt={name}
+            fill
+            className="object-cover object-[center_22%]"
+            sizes="(max-width: 768px) 92vw, 672px"
+            priority
+          />
+        </motion.div>
+        <figcaption className="sr-only">{name}</figcaption>
+        <button
+          ref={closeRef}
+          type="button"
+          className="absolute -right-2 -top-2 flex size-10 items-center justify-center rounded-full bg-white text-[var(--color-dark)] shadow-lg hover:bg-[var(--color-surface)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          aria-label="Close photo"
+          onClick={onClose}
+        >
+          <X className="size-5" aria-hidden />
+        </button>
+      </motion.figure>
+    </motion.div>
+  );
+}
+
 function MemberAvatar({ member }: { member: (typeof TEAM)[number] }) {
   const remote = linkedInUnavatarSrc(member.linkedin);
   const candidates = [member.photo, remote].filter(
     (s): s is string => typeof s === "string" && s.length > 0,
   );
   const [failCount, setFailCount] = useState(0);
+  const [zoomOpen, setZoomOpen] = useState(false);
+  const isClient = useIsClient();
+  const closeLightbox = useCallback(() => setZoomOpen(false), []);
 
   if (failCount >= candidates.length) {
     return (
@@ -60,16 +140,38 @@ function MemberAvatar({ member }: { member: (typeof TEAM)[number] }) {
   const src = candidates[failCount];
 
   return (
-    <div className="relative size-28 shrink-0 overflow-hidden rounded-full bg-[var(--color-surface)] ring-1 ring-black/5">
-      <Image
-        src={src}
-        alt=""
-        fill
-        className="object-cover"
-        sizes="112px"
-        onError={() => setFailCount((n) => n + 1)}
-      />
-    </div>
+    <>
+      <button
+        type="button"
+        className="group relative size-28 shrink-0 cursor-zoom-in overflow-hidden rounded-full bg-[var(--color-surface)] ring-1 ring-black/5 transition-shadow hover:ring-[var(--color-accent)]/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
+        aria-label={`View larger photo of ${member.name}`}
+        onClick={() => setZoomOpen(true)}
+      >
+        <Image
+          src={src}
+          alt=""
+          fill
+          className="object-cover object-[center_22%] transition-transform duration-200 group-hover:scale-105"
+          sizes="112px"
+          onError={() => setFailCount((n) => n + 1)}
+        />
+      </button>
+      {isClient
+        ? createPortal(
+            <AnimatePresence>
+              {zoomOpen ? (
+                <AvatarLightbox
+                  key={member.name}
+                  src={src}
+                  name={member.name}
+                  onClose={closeLightbox}
+                />
+              ) : null}
+            </AnimatePresence>,
+            document.body,
+          )
+        : null}
+    </>
   );
 }
 

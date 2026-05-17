@@ -10,6 +10,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "trim-team-photos": "node scripts/trim-team-photos.mjs",
     "postbuild": "next-sitemap"
   },
   "dependencies": {
@@ -32,6 +33,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
     "next-sitemap": "^4.2.3",
+    "sharp": "^0.34.5",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

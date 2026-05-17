@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore, useState } from "react";
 
 const TEST = {
   firstName: "Jane",
@@ -79,13 +79,13 @@ export default function LeadFormDevFixtures({
   onApplyChallenge,
   onClearMultiselects,
 }: LeadFormDevFixturesProps) {
-  const [visible, setVisible] = useState(false);
+  const visible = useSyncExternalStore(
+    () => () => {},
+    showFixturesBar,
+    () => false,
+  );
   const [status, setStatus] = useState("");
   const [busy, setBusy] = useState(false);
-
-  useEffect(() => {
-    setVisible(showFixturesBar());
-  }, []);
 
   if (!visible) return null;
 
