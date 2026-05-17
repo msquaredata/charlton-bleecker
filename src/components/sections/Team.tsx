@@ -11,6 +11,25 @@ import { linkedInUnavatarSrc } from "@/lib/linkedin-avatar";
 import { useIsClient } from "@/lib/use-is-client";
 import { cn } from "@/lib/utils";
 
+type TeamPhotoLightbox = {
+  src: string;
+  name: string;
+};
+
+function lockBodyScroll() {
+  const scrollbarWidth =
+    window.innerWidth - document.documentElement.clientWidth;
+  document.body.style.overflow = "hidden";
+  if (scrollbarWidth > 0) {
+    document.body.style.paddingRight = `${scrollbarWidth}px`;
+  }
+}
+
+function unlockBodyScroll() {
+  document.body.style.overflow = "";
+  document.body.style.paddingRight = "";
+}
+
 function initials(name: string) {
   return name
     .split(" ")
@@ -54,17 +73,12 @@ function AvatarLightbox({
   const closeRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    closeRef.current?.focus();
+    closeRef.current?.focus({ preventScroll: true });
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
     document.addEventListener("keydown", onKey);
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prev;
-    };
+    return () => document.removeEventListener("keydown", onKey);
   }, [onClose]);
 
   return (
@@ -76,7 +90,7 @@ function AvatarLightbox({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.2 }}
+      transition={{ duration: 0.18, ease: "easeOut" }}
     >
       <button
         type="button"
@@ -84,14 +98,8 @@ function AvatarLightbox({
         aria-label="Close photo"
         onClick={onClose}
       />
-      <motion.figure
-        className="relative z-10"
-        initial={{ scale: 0.92, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.92, opacity: 0 }}
-        transition={{ duration: 0.25, ease: "easeOut" }}
-      >
-        <motion.div className="relative aspect-[4/5] h-[min(85vh,42rem)] max-w-[92vw] overflow-hidden rounded-2xl shadow-2xl ring-1 ring-white/10">
+      <figure className="relative z-10">
+        <div className="relative aspect-[4/5] h-[min(85vh,42rem)] max-w-[92vw] overflow-hidden rounded-2xl shadow-2xl ring-1 ring-white/10">
           <Image
             src={src}
             alt={name}
@@ -100,7 +108,7 @@ function AvatarLightbox({
             sizes="(max-width: 768px) 92vw, 672px"
             priority
           />
-        </motion.div>
+        </div>
         <figcaption className="sr-only">{name}</figcaption>
         <button
           ref={closeRef}
@@ -111,20 +119,24 @@ function AvatarLightbox({
         >
           <X className="size-5" aria-hidden />
         </button>
-      </motion.figure>
+      </figure>
     </motion.div>
   );
 }
 
-function MemberAvatar({ member }: { member: (typeof TEAM)[number] }) {
+function MemberAvatar({
+  member,
+  onOpenPhoto,
+}: {
+  member: (typeof TEAM)[number];
+  onOpenPhoto: (photo: TeamPhotoLightbox) => void;
+}) {
   const remote = linkedInUnavatarSrc(member.linkedin);
   const candidates = [member.photo, remote].filter(
     (s): s is string => typeof s === "string" && s.length > 0,
   );
   const [failCount, setFailCount] = useState(0);
-  const [zoomOpen, setZoomOpen] = useState(false);
-  const isClient = useIsClient();
-  const closeLightbox = useCallback(() => setZoomOpen(false), []);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   if (failCount >= candidates.length) {
     return (
