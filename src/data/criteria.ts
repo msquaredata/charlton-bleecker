@@ -1,52 +1,52 @@
 export const PILLARS = [
   {
     title: "Operational Freedom",
-    body: "Our model gives managers the freedom to lead, with the backing of experienced investors focused on long-term value creation. We provide capital and strategic support, not a new boss.",
+    body: "Our model gives managers the freedom to lead, with the backing of experienced investors focused on long-term value creation. We provide capital and strategic support.",
     image: "/operationalfreedom.png",
   },
   {
     title: "Collaborative Expertise",
-    body: "Our team brings deep expertise spanning corporate finance, M&A, capital raising, governance, legal, and turnarounds, providing both strategic insight and tactical execution from day one.",
+    body: "Our team brings deep expertise spanning corporate finance, M&A, capital raising, governance, and legal, providing both strategic insight and tactical execution from day one.",
     image: "/collaborativeexperience.png",
   },
   {
     title: "Sector Focus",
-    body: "We invest in industries where we can add meaningful value: Healthcare, Technology, Defense, Professional Services, and Industrials.",
+    body: "We invest in B2B industries where we can add meaningful value: Healthcare, Technology, Defense, Professional Services, and Industrials.",
     image: "/sectorfocus.png",
   },
 ] as const;
 
 export const CRITERIA = [
-  { label: "Annual Revenue", value: "$3M – $30M" },
-  { label: "EBITDA", value: "$1M – $8M" },
-  { label: "EBITDA Margin", value: "15%+" },
+  { label: "Annual Revenue", value: "$3M+" },
+  { label: "EBITDA", value: "$1M+" },
+  { label: "EBITDA Margin", value: "15%+ potential" },
   { label: "Geography", value: "United States" },
   { label: "Ownership", value: "Founder-owned" },
   { label: "Business Type", value: "B2B Focus" },
-  { label: "Hold Period", value: "Permanent" },
-  { label: "Deal Structure", value: "Flexible" },
+  { label: "Hold Period", value: "Long term to permanent" },
+  { label: "Deal Structure", value: "Flexible, creative" },
 ] as const;
 
 export const WHY_US = [
   {
     icon: "Shield" as const,
     title: "Your Legacy, Protected",
-    body: "We don't flip. We hold. Your brand, culture, and people remain intact after the transaction, with no integration into a portfolio, no culture reset.",
+    body: "We don't flip. We hold. Your brand, culture, and people remain intact after the transaction, no culture reset.",
   },
   {
     icon: "Users" as const,
     title: "Operational Autonomy",
-    body: "Management stays in place. We provide capital and strategic support, not a new boss or a corporate playbook.",
+    body: "We provide capital and strategic support, and clear milestones. We give managers the opportunity to do what they do best.",
   },
   {
     icon: "CheckCircle" as const,
     title: "Certainty of Close",
-    body: "Permanent capital means no fund cycles, no LP approval committees, no re-trades. When we say yes, we mean it.",
+    body: "Permanent capital means when we say yes, we mean it. No surprises.",
   },
   {
     icon: "BarChart2" as const,
     title: "Fair, Transparent Valuations",
-    body: "We lead with our number and explain our math. No games, no bait-and-switch after diligence.",
+    body: "We lead with our number and explain our reasoning. No games, no bait-and-switch after due diligence.",
   },
   {
     icon: "Zap" as const,

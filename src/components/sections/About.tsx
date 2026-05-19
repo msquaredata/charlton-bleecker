@@ -1,6 +1,7 @@
 import Image from "next/image";
 import FadeUp from "@/components/ui/FadeUp";
 import { PILLARS } from "@/data/criteria";
+import { ABOUT_HEADLINE, ABOUT_LEAD } from "@/data/onePagerContent";
 
 export default function About() {
   return (
@@ -11,17 +12,12 @@ export default function About() {
             Who we are
           </p>
           <h2 className="mt-3 font-display text-3xl font-semibold text-[var(--color-dark)] md:text-4xl">
-            Built differently. Invested permanently.
+            {ABOUT_HEADLINE}
           </h2>
         </FadeUp>
         <FadeUp delay={0.06}>
           <p className="mt-6 max-w-3xl text-lg leading-relaxed text-[var(--color-muted)]">
-            Charlton Bleecker Group LLC is a private holding company focused on
-            acquiring and growing enduring scalable B2B businesses. We partner
-            with owner-managers to position companies for long-term success,
-            without fund cycle pressure, LP timelines, or re-trade risk.
-            Unlike traditional PE, we hold permanently. Your legacy, your team,
-            and your culture remain intact.
+            {ABOUT_LEAD}
           </p>
         </FadeUp>
         <div className="mt-14 grid items-stretch gap-8 md:grid-cols-3">

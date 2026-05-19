@@ -30,7 +30,7 @@ export const ABOUT_HEADLINE =
   "Built differently. Invested permanently." as const;
 
 export const ABOUT_LEAD =
-  "Charlton Bleecker Group LLC is a private holding company focused on acquiring and growing enduring scalable B2B businesses. We partner with owner-managers to position companies for long-term success, without fund cycle pressure, LP timelines, or re-trade risk. Unlike traditional PE, we hold permanently. Your legacy, your team, and your culture remain intact." as const;
+  "Charlton Bleecker Group LLC is a private holding company focused on acquiring and growing enduring scalable B2B businesses. We partner with owner-managers to position companies for long-term success, without the constraints of a fund termination date. Unlike traditional PE, we do not prioritize the exit. Your legacy, your team, and your culture remain intact. We welcome challenges, whether operational, financial or succession." as const;
 
 /** Side-by-side contrasts for the model one-pager. */
 export const MODEL_COMPARISON = [
@@ -47,17 +47,17 @@ export const MODEL_COMPARISON = [
   {
     dimension: "Governance",
     traditional: "Heavy board control and playbook rollouts common.",
-    ours: "Operational autonomy — capital and strategic support, not a new boss.",
+    ours: "Operational autonomy — capital and strategic support, and clear milestones.",
   },
   {
     dimension: "Certainty",
     traditional: "LP committees, fund cycles, and re-trades can stall or change deals.",
-    ours: "When we say yes, we mean it — no fund-cycle approvals.",
+    ours: "When we say yes, we mean it. No surprises.",
   },
   {
     dimension: "Process",
     traditional: "Long, opaque auctions and shifting valuation posture.",
-    ours: "Fair, transparent math; intro to LOI in weeks when there is fit.",
+    ours: "Fair, transparent reasoning; intro to LOI in weeks when there is fit.",
   },
 ] as const;
 
