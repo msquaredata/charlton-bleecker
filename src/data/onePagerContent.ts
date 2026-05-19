@@ -30,7 +30,7 @@ export const ABOUT_HEADLINE =
   "Built differently. Invested permanently." as const;
 
 export const ABOUT_LEAD =
-  "Charlton Bleecker Group LLC is a private holding company focused on acquiring and growing enduring scalable B2B businesses. We partner with owner-managers to position companies for long-term success, without the constraints of a fund termination date. Unlike traditional PE, we do not prioritize the exit. Your legacy, your team, and your culture remain intact. We welcome challenges, whether operational, financial or succession." as const;
+  "Charlton Bleecker Group LLC is a private holding company focused on acquiring and growing enduring scalable B2B businesses. We partner with owner-managers to position companies for long-term success, without the constraints of a fund termination date. Unlike traditional private equity firms, we do not prioritize the exit. Your legacy, your team, and your culture remain intact. We welcome challenges, whether operational, financial or succession." as const;
 
 /** Side-by-side contrasts for the model one-pager. */
 export const MODEL_COMPARISON = [
@@ -76,7 +76,7 @@ export const ONE_PAGER_VARIANTS = [
     slug: "model",
     title: "Model comparison",
     description:
-      "Traditional PE vs permanent holding — criteria and process on one screen.",
+      "Traditional private equity firms vs permanent holding — criteria and process on one screen.",
   },
   {
     slug: "overview",

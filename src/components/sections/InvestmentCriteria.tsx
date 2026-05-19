@@ -14,8 +14,8 @@ export default function InvestmentCriteria() {
             Our Investment Criteria
           </h2>
           <p className="mt-4 max-w-2xl text-lg text-white/80">
-            We focus on businesses with durable competitive advantages, recurring
-            revenue, and strong management teams.
+            We focus on businesses with a durable competitive edge, whether it
+            exists now or in the future.
           </p>
         </FadeUp>
         <div className="mt-12 grid items-stretch gap-6 sm:grid-cols-2">

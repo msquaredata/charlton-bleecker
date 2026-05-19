@@ -11,7 +11,7 @@ export const PILLARS = [
   },
   {
     title: "Sector Focus",
-    body: "We invest in B2B industries where we can add meaningful value: Healthcare, Technology, Defense, Professional Services, and Industrials.",
+    body: "We invest in B2B industries where we can add meaningful value including Healthcare, Technology, Defense, Professional Services, and Industrials.",
     image: "/sectorfocus.png",
   },
 ] as const;
@@ -31,7 +31,7 @@ export const WHY_US = [
   {
     icon: "Shield" as const,
     title: "Your Legacy, Protected",
-    body: "We don't flip. We hold. Your brand, culture, and people remain intact after the transaction, no culture reset.",
+    body: "We build and grow. We don't flip. Your brand, culture, and people remain intact after the transaction, no culture reset.",
   },
   {
     icon: "Users" as const,
@@ -46,7 +46,7 @@ export const WHY_US = [
   {
     icon: "BarChart2" as const,
     title: "Fair, Transparent Valuations",
-    body: "We lead with our number and explain our reasoning. No games, no bait-and-switch after due diligence.",
+    body: "We lead with our offer and explain our reasoning. No games, no bait-and-switch after due diligence.",
   },
   {
     icon: "Zap" as const,
@@ -55,8 +55,8 @@ export const WHY_US = [
   },
   {
     icon: "Lock" as const,
-    title: "Confidentiality First",
-    body: "NDA available before any conversation begins. We protect your process and your people throughout.",
+    title: "Confidentiality",
+    body: "NDA available before any conversation begins. We protect all parties throughout the process.",
     cta: {
       label: "Download NDA",
       href: "https://www.dropbox.com/scl/fi/2m4d1l5l4o3qphqobz8z2/CBG-Template-Non-Disclosure-Agreement-FINAL.docx?rlkey=ou8xxne8wandla7rrb5witc6y&st=7u4jq0uu&dl=0",
@@ -93,6 +93,6 @@ export const PROCESS_STEPS = [
   {
     number: "06",
     title: "Partnership",
-    body: "We're in it for the long haul. Ongoing strategic support, capital access, and collaboration.",
+    body: "Ongoing strategic support, capital access, and collaboration.",
   },
 ] as const;

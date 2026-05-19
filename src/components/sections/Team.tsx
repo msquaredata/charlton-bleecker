@@ -265,17 +265,14 @@ export default function Team() {
       <div className="container-site">
         <FadeUp>
           <p className="text-xs font-semibold uppercase tracking-widest text-[var(--color-accent)]">
-            Our team
+            Who we are
           </p>
           <h2 className="mt-3 font-display text-3xl font-semibold text-[var(--color-dark)] md:text-4xl">
-            The People Behind the Capital
+            Meet the Team
           </h2>
         </FadeUp>
         <div className="mt-12">
-          <h3 className="font-display text-lg font-semibold text-[var(--color-dark)]">
-            Leadership
-          </h3>
-          <div
+         <div
             className={cn(
               "mt-6 grid items-stretch gap-8",
               leaders.length === 1
@@ -294,10 +291,7 @@ export default function Team() {
           </div>
         </div>
         <div className="mt-14">
-          <h3 className="font-display text-lg font-semibold text-[var(--color-dark)]">
-            Directors
-          </h3>
-          <div className="mt-6 grid grid-cols-1 items-stretch gap-8 sm:grid-cols-2">
+         <div className="mt-6 grid grid-cols-1 items-stretch gap-8 sm:grid-cols-2">
             {directors.map((m, i) => (
               <MemberCard
                 key={m.name}

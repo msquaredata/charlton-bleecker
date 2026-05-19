@@ -60,11 +60,7 @@ export default function HowItWorks() {
             </motion.li>
           ))}
         </ol>
-        <FadeUp delay={0.2}>
-          <p className="mt-12 text-center text-sm text-[var(--color-muted)]">
-            Typical timeline from first call to close: 60–90 days.
-          </p>
-        </FadeUp>
+        
       </div>
     </section>
   );

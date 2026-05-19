@@ -87,7 +87,7 @@ def main() -> None:
     doc.add_paragraph("After edits (draft for confirmation):", style="Intense Quote")
     doc.add_paragraph(
         "…for long-term success, without the constraints of a fund termination date. "
-        "Unlike traditional PE, we do not prioritize the exit. Your legacy, your team, "
+        "Unlike traditional private equity firms, we do not prioritize the exit. Your legacy, your team, "
         "and your culture remain intact. We welcome challenges, whether operational, "
         "financial or succession."
     )
