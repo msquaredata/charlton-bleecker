@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Calendar, Mail, Lock } from "lucide-react";
 import FadeUp from "@/components/ui/FadeUp";
+import { NDA_TEMPLATE_HREF } from "@/data/onePagerContent";
 
 export default function Contact() {
   const [sending, setSending] = useState(false);
@@ -38,9 +39,6 @@ export default function Contact() {
       setSending(false);
     }
   }
-
-  const ndaHref =
-    "https://www.dropbox.com/scl/fi/2m4d1l5l4o3qphqobz8z2/CBG-Template-Non-Disclosure-Agreement-FINAL.docx?rlkey=ou8xxne8wandla7rrb5witc6y&st=7u4jq0uu&dl=0";
 
   const field =
     "mt-2 w-full rounded-md border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2 text-sm text-[var(--color-text)] focus:border-[var(--color-accent)] focus:outline-none";
@@ -111,7 +109,7 @@ export default function Contact() {
                     Concerned about confidentiality? We understand.
                   </p>
                   <a
-                    href={ndaHref}
+                    href={NDA_TEMPLATE_HREF}
                     className="mt-2 inline-flex text-sm font-semibold text-[var(--color-accent)] hover:underline"
                     target="_blank"
                     rel="noopener noreferrer"

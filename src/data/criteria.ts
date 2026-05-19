@@ -59,7 +59,7 @@ export const WHY_US = [
     body: "NDA available before any conversation begins. We protect all parties throughout the process.",
     cta: {
       label: "Download NDA",
-      href: "https://www.dropbox.com/scl/fi/2m4d1l5l4o3qphqobz8z2/CBG-Template-Non-Disclosure-Agreement-FINAL.docx?rlkey=ou8xxne8wandla7rrb5witc6y&st=7u4jq0uu&dl=0",
+      href: "/documents/cbg-nda.pdf",
     },
   },
 ] as const;
