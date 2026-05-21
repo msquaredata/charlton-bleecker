@@ -6,7 +6,7 @@ export const PILLARS = [
   },
   {
     title: "Collaborative Expertise",
-    body: "Our team brings deep expertise spanning corporate finance, M&A, capital raising, technologygovernance, and legal, providing both strategic insight and tactical execution from day one.",
+    body: "Our team brings deep expertise spanning corporate finance, M&A, capital raising, technology, governance, and legal, providing both strategic insight and tactical execution from day one.",
     image: "/collaborativeexperience.png",
   },
   {
