@@ -58,9 +58,9 @@ export default function Footer() {
               ContactUs@CharltonBleecker.com
             </a>
             <a
-              href="https://www.linkedin.com/in/gtoddsilva/"
+              href="https://www.linkedin.com/company/charlton-bleecker-group/"
               className="mt-3 inline-flex items-center justify-center gap-2 text-sm font-medium leading-normal text-[var(--color-dark)] hover:text-[var(--color-accent)] md:justify-end"
-              aria-label="LinkedIn: G. Todd Silva"
+              aria-label="LinkedIn: Charlton Bleecker"
             >
               <Linkedin className="size-5 shrink-0" aria-hidden />
               LinkedIn
