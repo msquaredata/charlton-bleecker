@@ -14,7 +14,7 @@ export function buildTeamNotifySubject(raw) {
 /**
  * Matches n8n "Outlook - Notify Team" body (HubSpot link when HUBSPOT_PORTAL_ID is set).
  * @param {Record<string, string>} raw
- * @param {object} n normalizeLeadPayload result
+ * @param {object} n normalizeLeadPayload result (includes industryLabel)
  * @param {string} dealId
  */
 export function buildTeamNotifyBody(raw, n, dealId) {
@@ -31,7 +31,7 @@ Role: ${raw.role}
 Company: ${raw.businessName} || ${raw.companyRepresented || ""}
 Revenue: ${raw.revenueRangeText}
 EBITDA Margin: ${raw.ebitdaMargin}
-Industry: ${raw.industry}
+Industry: ${n.industryLabel || raw.industry}
 Headquarters: ${raw.hqCity}, ${raw.hqState}
 
 Deal Summary: ${n.fit_summary || ""}
