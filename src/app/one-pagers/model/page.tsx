@@ -8,21 +8,17 @@ import {
 } from "@/data/onePagerContent";
 
 export const metadata: Metadata = {
-  title: "Model comparison · One-pagers",
+  title: "Comparison · One-pagers",
 };
 
 export default function OnePagerModelPage() {
   return (
     <main className="container-site py-10 md:py-14">
-      <p className="text-xs font-semibold uppercase tracking-widest text-[var(--color-accent)]">
-        Model comparison
-      </p>
       <h1 className="mt-2 font-display text-3xl font-semibold text-[var(--color-dark)] md:text-4xl">
         {ABOUT_HEADLINE}
       </h1>
       <p className="mt-4 max-w-2xl text-sm text-[var(--color-muted)] md:text-base">
-        Why permanent capital and a holding-company structure change the
-        experience for founder-led B2B businesses.
+      Charlton Bleecker Group LLC is a private holding company focused on acquiring and growing enduring scalable B2B businesses. We partner with owner-managers to position companies for long-term success, without the constraints of a fund termination date. Your legacy, your team, and your culture remain intact. We welcome challenges, whether operational, financial or succession.
       </p>
 
       <div className="mt-10 overflow-x-auto rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] shadow-sm">
@@ -33,7 +29,7 @@ export default function OnePagerModelPage() {
                 Dimension
               </th>
               <th className="px-4 py-3 font-display font-semibold text-[var(--color-muted)] md:px-5">
-                Typical PE / fund model
+                Typical PE fund
               </th>
               <th className="px-4 py-3 font-display font-semibold text-[var(--color-accent)] md:px-5">
                 Charlton Bleecker

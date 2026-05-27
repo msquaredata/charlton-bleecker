@@ -79,7 +79,7 @@ export default function Hero() {
         </FadeUp>
         <FadeUp delay={0.08}>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-white/80 md:text-xl">
-            Permanent capital. Operational freedom. Long-term value.
+            Creative solutions. Aligned incentives. Lasting success.
           </p>
         </FadeUp>
         <FadeUp delay={0.16}>

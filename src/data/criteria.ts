@@ -11,7 +11,7 @@ export const PILLARS = [
   },
   {
     title: "Sector Focus",
-    body: "We invest in B2B industries where we can add meaningful value including Healthcare, Technology, Defense, Professional Services, and Industrials.",
+    body: "We invest in B2B industries where we can add meaningful value including Healthcare, Professional Services, and the intersection of Industrial Manufacturing & Technology.",
     image: "/sectorfocus.png",
   },
 ] as const;

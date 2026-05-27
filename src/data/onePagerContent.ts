@@ -24,39 +24,39 @@ export const HERO_HEADLINE =
   "We partner with founders to build enduring businesses." as const;
 
 export const HERO_TAGLINE =
-  "Permanent capital. Operational freedom. Long-term value." as const;
+  "Creative solutions. Aligned incentives. Lasting success." as const;
 
 export const ABOUT_HEADLINE =
-  "Built differently. Invested permanently." as const;
+  "Built differently." as const;
 
 export const ABOUT_LEAD =
-  "Charlton Bleecker Group LLC is a private holding company focused on acquiring and growing enduring scalable B2B businesses. We partner with owner-managers to position companies for long-term success, without the constraints of a fund termination date. Unlike traditional private equity firms, we do not prioritize the exit. Your legacy, your team, and your culture remain intact. We welcome challenges, whether operational, financial or succession." as const;
+  "Charlton Bleecker Group LLC is a private holding company focused on acquiring and growing enduring scalable B2B businesses. We partner with owner-managers to position companies for long-term success, without the constraints of a fund termination date. Your legacy, your team, and your culture remain intact. We welcome challenges, whether operational, financial or succession." as const;
 
 /** Side-by-side contrasts for the model one-pager. */
 export const MODEL_COMPARISON = [
   {
     dimension: "Time horizon",
     traditional: "Fund life and exit timelines drive decisions.",
-    ours: "Permanent capital — we compound without a forced exit clock.",
+    ours: "We invest without a predetermined exit horizon allowing value to compound on its own timeline.",
   },
   {
     dimension: "Hold period",
     traditional: "Typical 3–7 year hold; portfolio integration pressure.",
-    ours: "We hold for the long term; no flip, no culture reset.",
+    ours: "We hold for the long term; no quick flip, no culture reset.",
   },
   {
-    dimension: "Governance",
-    traditional: "Heavy board control and playbook rollouts common.",
+    dimension: "Management",
+    traditional: "No heavy-handed control or prescribed ways of operating.",
     ours: "Operational autonomy — capital and strategic support, and clear milestones.",
   },
   {
     dimension: "Certainty",
-    traditional: "LP committees, fund cycles, and re-trades can stall or change deals.",
+    traditional: "Investment committees, fund cycles, and terms can stall or change deals.",
     ours: "When we say yes, we mean it. No surprises.",
   },
   {
     dimension: "Process",
-    traditional: "Long, opaque auctions and shifting valuation posture.",
+    traditional: "Lengthy timelines, limited visibility, and valuations that shift late in the process.",
     ours: "Fair, transparent reasoning; intro to LOI in weeks when there is fit.",
   },
 ] as const;
