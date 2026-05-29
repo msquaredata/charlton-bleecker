@@ -32,14 +32,16 @@ export default function DownloadPdfButton({
   const pathname = usePathname();
   const slug = resolveSlug(explicitSlug, pathname);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   if (!slug) {
     return null;
   }
 
-  const activeSlug = slug;
+  const pdfUrl = `/api/one-pagers/${slug}/pdf`;
+  const filename = onePagerPdfFilename(slug);
 
-  async function handleDownload(event: React.MouseEvent<HTMLButtonElement>) {
+  async function handleDownload(event: React.MouseEvent<HTMLAnchorElement>) {
     event.preventDefault();
     event.stopPropagation();
 
@@ -48,9 +50,10 @@ export default function DownloadPdfButton({
     }
 
     setLoading(true);
+    setError(false);
 
     try {
-      const response = await fetch(`/api/one-pagers/${activeSlug}/pdf`);
+      const response = await fetch(pdfUrl);
 
       if (!response.ok) {
         throw new Error("PDF generation failed");
@@ -60,11 +63,11 @@ export default function DownloadPdfButton({
       const objectUrl = URL.createObjectURL(blob);
       const anchor = document.createElement("a");
       anchor.href = objectUrl;
-      anchor.download = onePagerPdfFilename(activeSlug);
+      anchor.download = filename;
       anchor.click();
       URL.revokeObjectURL(objectUrl);
     } catch {
-      window.print();
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -83,15 +86,15 @@ export default function DownloadPdfButton({
   }[variant];
 
   return (
-    <button
-      type="button"
+    <a
+      href={pdfUrl}
+      download={filename}
       onClick={handleDownload}
-      disabled={loading}
-      className={`${baseStyles} ${variantStyles} ${className}`.trim()}
       aria-busy={loading}
+      className={`${baseStyles} ${variantStyles} ${className} ${loading ? "pointer-events-none opacity-60" : ""}`.trim()}
     >
       <Download className="size-4 shrink-0" aria-hidden />
-      {loading ? "Preparing PDF…" : "Download PDF"}
-    </button>
+      {loading ? "Preparing PDF…" : error ? "Download failed — retry" : "Download PDF"}
+    </a>
   );
 }

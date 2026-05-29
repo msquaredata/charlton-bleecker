@@ -11,3 +11,7 @@ export function isOnePagerSlug(value: string): value is OnePagerSlug {
 export function onePagerPdfFilename(slug: OnePagerSlug): string {
   return `charlton-bleecker-one-pager-${slug}.pdf`;
 }
+
+export function isSinglePagePdf(slug: OnePagerSlug): boolean {
+  return slug === "model";
+}

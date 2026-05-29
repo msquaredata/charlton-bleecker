@@ -2,7 +2,7 @@
 @media print {
   @page {
     size: letter;
-    margin: 0.55in;
+    margin: 0.35in;
   }
 
   .one-pagers-shell {
@@ -35,53 +35,493 @@
     display: none !important;
   }
 
-  .one-pagers-shell .print-break-before {
-    break-before: page;
-    page-break-before: always;
-  }
-
-  .one-pagers-shell .one-pager-card {
-    break-inside: avoid;
-    page-break-inside: avoid;
-    box-shadow: none !important;
-  }
-
-  .one-pagers-shell section {
-    break-inside: auto;
-    page-break-inside: auto;
-  }
-
-  .one-pagers-shell table {
-    break-inside: auto;
-    page-break-inside: auto;
-  }
-
-  .one-pagers-shell thead {
-    display: table-header-group;
-  }
-
-  .one-pagers-shell tbody {
-    break-inside: auto;
-    page-break-inside: auto;
-  }
-
-  .one-pagers-shell tr {
-    break-inside: avoid;
-    page-break-inside: avoid;
-  }
-
-  .one-pagers-shell img {
-    break-inside: avoid;
-    page-break-inside: avoid;
-  }
-
   .one-pagers-shell main {
     padding-top: 0.5rem !important;
     padding-bottom: 0.5rem !important;
   }
 
-  .one-pagers-shell footer.one-pager-card {
+  /* Single-page PDF mode: compact layout, no page breaks */
+  .one-pagers-shell.one-pager-single-page *,
+  .one-pagers-shell.one-pager-single-page *::before,
+  .one-pagers-shell.one-pager-single-page *::after {
+    break-before: auto !important;
+    break-after: auto !important;
+    break-inside: auto !important;
+    page-break-before: auto !important;
+    page-break-after: auto !important;
+    page-break-inside: auto !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page .one-pagers-header {
+    padding-top: 0.2rem !important;
+    padding-bottom: 0.2rem !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page main {
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page h1 {
+    font-size: 1.35rem !important;
+    line-height: 1.2 !important;
+    margin-top: 0.25rem !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page h2 {
+    font-size: 1rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page h3 {
+    font-size: 0.85rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page p,
+  .one-pagers-shell.one-pager-single-page li,
+  .one-pagers-shell.one-pager-single-page td,
+  .one-pagers-shell.one-pager-single-page th {
+    font-size: 0.68rem !important;
+    line-height: 1.35 !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page section {
+    margin-top: 0.55rem !important;
+    padding-top: 0 !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page .mt-10,
+  .one-pagers-shell.one-pager-single-page .mt-12,
+  .one-pagers-shell.one-pager-single-page .mt-14,
+  .one-pagers-shell.one-pager-single-page .mt-16 {
+    margin-top: 0.55rem !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page .mt-4,
+  .one-pagers-shell.one-pager-single-page .mt-6,
+  .one-pagers-shell.one-pager-single-page .mt-8 {
+    margin-top: 0.35rem !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page .gap-3,
+  .one-pagers-shell.one-pager-single-page .gap-4,
+  .one-pagers-shell.one-pager-single-page .gap-6 {
+    gap: 0.3rem !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page .one-pager-card {
+    box-shadow: none !important;
+    padding: 0.35rem !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page footer.one-pager-card {
+    margin-top: 0.5rem !important;
+    padding-top: 0.45rem !important;
+    padding-bottom: 0.25rem !important;
+    border-top-width: 1px !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page footer .flex-col {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 0.35rem !important;
+    align-items: center !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page footer a,
+  .one-pagers-shell.one-pager-single-page footer .inline-flex {
+    min-height: 0 !important;
+    padding: 0.15rem 0.4rem !important;
+    font-size: 0.62rem !important;
+    border-width: 1px !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page footer p {
+    margin-top: 0.35rem !important;
+    font-size: 0.55rem !important;
+    line-height: 1.3 !important;
+  }
+
+  /* Model one-pager — fill the page with comfortable section spacing */
+  .one-pagers-shell.one-pager-single-page[data-one-pager="model"] {
+    min-height: 10.25in;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .one-pagers-shell.one-pager-single-page[data-one-pager="model"] .one-pagers-header {
+    padding-top: 0.35rem !important;
+    padding-bottom: 0.35rem !important;
+    flex-shrink: 0;
+  }
+
+  .one-pagers-shell.one-pager-single-page[data-one-pager="model"] main {
+    flex: 1;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.25rem !important;
+    min-height: 0;
+  }
+
+  .one-pagers-shell.one-pager-single-page[data-one-pager="model"] h1 {
+    font-size: 1.55rem !important;
+    line-height: 1.2 !important;
+    margin-top: 0 !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page[data-one-pager="model"] main > p {
+    font-size: 0.76rem !important;
+    line-height: 1.5 !important;
+    margin-top: 0.5rem !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page[data-one-pager="model"] h2 {
+    font-size: 1.05rem !important;
+    line-height: 1.25 !important;
+    margin-bottom: 0.4rem !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page[data-one-pager="model"] section {
+    margin-top: 0 !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page[data-one-pager="model"] main > .mt-10 {
+    margin-top: 0 !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page[data-one-pager="model"] table {
+    font-size: 0.72rem !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page[data-one-pager="model"] table th,
+  .one-pagers-shell.one-pager-single-page[data-one-pager="model"] table td {
+    padding: 0.4rem 0.5rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page[data-one-pager="model"] dl {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 0.45rem !important;
+    margin-top: 0.5rem !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page[data-one-pager="model"] dl .one-pager-card {
+    padding: 0.45rem 0.5rem !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page[data-one-pager="model"] dl dt {
+    font-size: 0.58rem !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page[data-one-pager="model"] dl dd {
+    font-size: 0.85rem !important;
+    margin-top: 0.2rem !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page[data-one-pager="model"] ol {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 0.45rem !important;
+    margin-top: 0.5rem !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page[data-one-pager="model"] ol li {
+    padding: 0.45rem !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page[data-one-pager="model"] ol li span.font-display {
+    font-size: 1.15rem !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page[data-one-pager="model"] ol li p {
+    font-size: 0.7rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page[data-one-pager="model"] footer.one-pager-card {
+    margin-top: 0 !important;
+    padding-top: 0.6rem !important;
+    padding-bottom: 0.15rem !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page[data-one-pager="model"] footer a,
+  .one-pagers-shell.one-pager-single-page[data-one-pager="model"] footer .inline-flex {
+    padding: 0.2rem 0.5rem !important;
+    font-size: 0.65rem !important;
+  }
+
+  .one-pagers-shell.one-pager-single-page[data-one-pager="model"] footer p {
+    margin-top: 0.45rem !important;
+    font-size: 0.58rem !important;
+  }
+
+  /* Multi-page PDF export (overview) */
+  .one-pagers-shell.one-pager-multi-page .print-pdf-page-break {
+    break-before: page;
+    page-break-before: always;
+  }
+
+  .one-pagers-shell.one-pager-multi-page .one-pager-card {
     break-inside: avoid;
     page-break-inside: avoid;
+    box-shadow: none !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page .one-pagers-header {
+    padding-top: 0.35rem !important;
+    padding-bottom: 0.35rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page main {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] section {
+    margin-top: 1rem !important;
+    padding-top: 0 !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] .mt-14 {
+    margin-top: 1rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] .mt-8,
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] .mt-6 {
+    margin-top: 0.65rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] .gap-4,
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] .gap-6 {
+    gap: 0.5rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] h1 {
+    font-size: 1.45rem !important;
+    line-height: 1.2 !important;
+    margin-top: 0.35rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] h2 {
+    font-size: 1.05rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] h3 {
+    font-size: 0.82rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] p,
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] li {
+    font-size: 0.72rem !important;
+    line-height: 1.45 !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] section.rounded-xl.bg-\[var\(--color-dark\)\] {
+    padding: 0.85rem 1rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] section.border-t {
+    padding-top: 0.75rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] .aspect-\[16\/10\] {
+    aspect-ratio: 16 / 8 !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] .grid.md\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] .grid.xl\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] .grid.md\:grid-cols-4,
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] .grid.grid-cols-2 {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] article.one-pager-card {
+    padding: 0.5rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] svg {
+    width: 1.1rem !important;
+    height: 1.1rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] .pb-8 {
+    padding-bottom: 0.5rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] .size-8 {
+    width: 1.35rem !important;
+    height: 1.35rem !important;
+    font-size: 0.6rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] section.rounded-xl.bg-\[var\(--color-surface\)\] {
+    padding: 0.65rem 0.75rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] section.rounded-xl.bg-\[var\(--color-surface\)\] .grid {
+    gap: 0.35rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] section.rounded-xl.bg-\[var\(--color-surface\)\] article.one-pager-card {
+    padding: 0.4rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] section.rounded-xl.bg-\[var\(--color-surface\)\] h3 {
+    margin-top: 0.25rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] .overview-process-steps {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.35rem !important;
+    margin-top: 0.5rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] .overview-process-steps > div {
+    padding-bottom: 0 !important;
+    gap: 0.35rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] .overview-process-steps .absolute {
+    display: none !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] .overview-process-steps .size-8 {
+    width: 1.1rem !important;
+    height: 1.1rem !important;
+    font-size: 0.55rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] .overview-process-steps p.font-display {
+    font-size: 0.72rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] footer.one-pager-card {
+    break-before: avoid;
+    page-break-before: avoid;
+    margin-top: 0.85rem !important;
+    padding-top: 0.65rem !important;
+    padding-bottom: 0.25rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] footer a,
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] footer .inline-flex {
+    min-height: 0 !important;
+    padding: 0.2rem 0.45rem !important;
+    font-size: 0.62rem !important;
+    border-width: 1px !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="overview"] footer p {
+    margin-top: 0.4rem !important;
+    font-size: 0.55rem !important;
+    line-height: 1.3 !important;
+  }
+
+  /* Brief one-pager — two-page PDF */
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="brief"] main {
+    max-width: 100% !important;
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="brief"] h1 {
+    font-size: 1.45rem !important;
+    line-height: 1.2 !important;
+    margin-top: 0.35rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="brief"] h2 {
+    font-size: 1.05rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="brief"] main > p {
+    font-size: 0.78rem !important;
+    line-height: 1.5 !important;
+    margin-top: 0.5rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="brief"] section {
+    margin-top: 0.85rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="brief"] .mt-10,
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="brief"] .mt-12 {
+    margin-top: 0.85rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="brief"] p,
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="brief"] li {
+    font-size: 0.74rem !important;
+    line-height: 1.45 !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="brief"] ul {
+    margin-top: 0.4rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="brief"] ul li {
+    margin-top: 0.15rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="brief"] .brief-process-steps {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.35rem 0.75rem !important;
+    margin-top: 0.45rem !important;
+    padding-left: 0 !important;
+    list-style: none !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="brief"] .brief-process-steps li {
+    padding-left: 0 !important;
+    margin-top: 0 !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="brief"] .brief-process-steps li::before {
+    content: none !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="brief"] .size-24 {
+    width: 3.25rem !important;
+    height: 3.25rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="brief"] section.print-pdf-page-break > div {
+    padding: 0.65rem !important;
+    margin-top: 0.5rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="brief"] footer.one-pager-card {
+    break-before: avoid;
+    page-break-before: avoid;
+    margin-top: 0.85rem !important;
+    padding-top: 0.65rem !important;
+    padding-bottom: 0.25rem !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="brief"] footer a,
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="brief"] footer .inline-flex {
+    min-height: 0 !important;
+    padding: 0.2rem 0.45rem !important;
+    font-size: 0.62rem !important;
+    border-width: 1px !important;
+  }
+
+  .one-pagers-shell.one-pager-multi-page[data-one-pager="brief"] footer p {
+    margin-top: 0.4rem !important;
+    font-size: 0.55rem !important;
+    line-height: 1.3 !important;
   }
 }

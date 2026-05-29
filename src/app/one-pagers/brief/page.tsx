@@ -67,7 +67,7 @@ export default function OnePagerBriefPage() {
         <h2 className="font-display text-xl font-semibold text-[var(--color-dark)]">
           How we move when there is fit
         </h2>
-        <ol className="mt-4 list-decimal space-y-3 pl-5 text-[var(--color-muted)]">
+        <ol className="brief-process-steps mt-4 list-decimal space-y-3 pl-5 text-[var(--color-muted)]">
           {PROCESS_STEPS.map((step) => (
             <li key={step.number} className="one-pager-card pl-1">
               <span className="font-medium text-[var(--color-dark)]">{step.title}.</span>{" "}
@@ -77,7 +77,7 @@ export default function OnePagerBriefPage() {
         </ol>
       </section>
 
-      <section className="print-break-before mt-10">
+      <section className="print-pdf-page-break mt-10">
         <h2 className="font-display text-xl font-semibold text-[var(--color-dark)]">
           Leadership
         </h2>

@@ -1,10 +1,4 @@
 {
-  "functions": {
-    "src/app/api/one-pagers/[slug]/pdf/route.ts": {
-      "memory": 1024,
-      "maxDuration": 60
-    }
-  },
   "redirects": [
     {
       "source": "/deal-prospect-intake.html",
