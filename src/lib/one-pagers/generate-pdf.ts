@@ -8,7 +8,7 @@ const PDF_MARGIN_IN = 0.35;
 
 const CHROMIUM_REMOTE_PACK =
   process.env.CHROMIUM_REMOTE_EXEC_PATH ??
-  "https://github.com/Sparticuz/chromium/releases/download/v149.0.0/chromium-v149.0.0-pack.tar";
+  "https://github.com/Sparticuz/chromium/releases/download/v149.0.0/chromium-v149.0.0-pack.x64.tar";
 
 export function resolvePdfOrigin(request?: Request): string {
   if (request) {
