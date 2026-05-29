@@ -6,13 +6,32 @@ const LETTER_WIDTH_PX = 816;
 const LETTER_HEIGHT_PX = 1056;
 const PDF_MARGIN_IN = 0.35;
 
-function resolveSiteOrigin(): string {
+const CHROMIUM_REMOTE_PACK =
+  process.env.CHROMIUM_REMOTE_EXEC_PATH ??
+  "https://github.com/Sparticuz/chromium/releases/download/v149.0.0/chromium-v149.0.0-pack.tar";
+
+export function resolvePdfOrigin(request?: Request): string {
+  if (request) {
+    const forwardedHost = request.headers.get("x-forwarded-host");
+    const host =
+      forwardedHost?.split(",")[0]?.trim() ?? request.headers.get("host")?.trim();
+
+    if (host) {
+      const proto =
+        request.headers.get("x-forwarded-proto")?.split(",")[0]?.trim() ??
+        "https";
+      return `${proto}://${host}`;
+    }
+  }
+
   if (process.env.SITE_URL) {
     return process.env.SITE_URL.replace(/\/$/, "");
   }
+
   if (process.env.VERCEL_URL) {
     return `https://${process.env.VERCEL_URL}`;
   }
+
   return "http://localhost:3000";
 }
 
@@ -22,11 +41,12 @@ async function launchBrowser(): Promise<Browser> {
   );
 
   if (isServerless) {
-    const chromium = await import("@sparticuz/chromium");
+    const chromium = (await import("@sparticuz/chromium-min")).default;
+
     return puppeteer.launch({
-      args: chromium.default.args,
+      args: chromium.args,
       defaultViewport: { width: LETTER_WIDTH_PX, height: LETTER_HEIGHT_PX },
-      executablePath: await chromium.default.executablePath(),
+      executablePath: await chromium.executablePath(CHROMIUM_REMOTE_PACK),
       headless: true,
     });
   }
@@ -37,8 +57,10 @@ async function launchBrowser(): Promise<Browser> {
   });
 }
 
-export async function generateOnePagerPdf(slug: OnePagerSlug): Promise<Buffer> {
-  const origin = resolveSiteOrigin();
+export async function generateOnePagerPdf(
+  slug: OnePagerSlug,
+  origin = resolvePdfOrigin(),
+): Promise<Buffer> {
   const url = `${origin}/one-pagers/${slug}`;
   const singlePage = isSinglePagePdf(slug);
   const browser = await launchBrowser();
@@ -46,7 +68,7 @@ export async function generateOnePagerPdf(slug: OnePagerSlug): Promise<Buffer> {
   try {
     const page = await browser.newPage();
     await page.setViewport({ width: LETTER_WIDTH_PX, height: LETTER_HEIGHT_PX });
-    await page.goto(url, { waitUntil: "networkidle0", timeout: 60_000 });
+    await page.goto(url, { waitUntil: "load", timeout: 45_000 });
     await page.evaluate(async () => {
       await document.fonts.ready;
     });

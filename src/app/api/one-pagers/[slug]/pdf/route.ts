@@ -1,4 +1,7 @@
-import { generateOnePagerPdf } from "@/lib/one-pagers/generate-pdf";
+import {
+  generateOnePagerPdf,
+  resolvePdfOrigin,
+} from "@/lib/one-pagers/generate-pdf";
 import { isOnePagerSlug, onePagerPdfFilename } from "@/lib/one-pagers/slugs";
 
 export const runtime = "nodejs";
@@ -9,7 +12,7 @@ type RouteContext = {
   params: Promise<{ slug: string }>;
 };
 
-export async function GET(_request: Request, context: RouteContext) {
+export async function GET(request: Request, context: RouteContext) {
   const { slug } = await context.params;
 
   if (!isOnePagerSlug(slug)) {
@@ -17,7 +20,8 @@ export async function GET(_request: Request, context: RouteContext) {
   }
 
   try {
-    const pdf = await generateOnePagerPdf(slug);
+    const origin = resolvePdfOrigin(request);
+    const pdf = await generateOnePagerPdf(slug, origin);
 
     return new Response(new Uint8Array(pdf), {
       headers: {
@@ -27,7 +31,8 @@ export async function GET(_request: Request, context: RouteContext) {
       },
     });
   } catch (error) {
-    console.error("[one-pager-pdf]", slug, error);
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("[one-pager-pdf]", slug, message, error);
     return new Response("Failed to generate PDF", { status: 500 });
   }
 }
