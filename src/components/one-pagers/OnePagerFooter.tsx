@@ -52,13 +52,13 @@ export default function OnePagerFooter({ variant = "leaf" }: OnePagerFooterProps
         {variant === "leaf" ? (
           <Link
             href="/one-pagers"
-            className="text-sm font-medium text-[var(--color-muted)] hover:text-[var(--color-accent)]"
+            className="pdf-export-hidden text-sm font-medium text-[var(--color-muted)] hover:text-[var(--color-accent)]"
           >
             All one-pagers
           </Link>
         ) : null}
       </div>
-      <p className="mt-8 max-w-3xl text-xs leading-relaxed text-[var(--color-muted)]">
+      <p className="pdf-export-hidden mt-8 max-w-3xl text-xs leading-relaxed text-[var(--color-muted)]">
         {DISCLAIMER_SHORT}{" "}
         <Link href="/disclaimer" className="underline hover:text-[var(--color-dark)]">
           Full disclaimer

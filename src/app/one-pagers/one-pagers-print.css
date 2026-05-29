@@ -31,7 +31,8 @@
     color: inherit;
   }
 
-  .one-pagers-shell .print-hidden {
+  .one-pagers-shell .print-hidden,
+  .one-pagers-shell.one-pager-pdf-export .pdf-export-hidden {
     display: none !important;
   }
 
