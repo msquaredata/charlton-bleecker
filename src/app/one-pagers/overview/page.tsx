@@ -61,7 +61,7 @@ export default function OnePagerOverviewPage() {
         </p>
       </section>
 
-      <section className="mt-14">
+      <section className="print-break-before mt-14">
         <h2 className="font-display text-xl font-semibold text-[var(--color-dark)] md:text-2xl">
           What you get
         </h2>
@@ -93,7 +93,7 @@ export default function OnePagerOverviewPage() {
         </div>
       </section>
 
-      <section className="mt-14 rounded-xl bg-[var(--color-surface)] px-5 py-10 md:px-8 md:py-12">
+      <section className="print-break-before mt-14 rounded-xl bg-[var(--color-surface)] px-5 py-10 md:px-8 md:py-12">
         <h2 className="font-display text-xl font-semibold text-[var(--color-dark)] md:text-2xl">
           Why founders choose us
         </h2>
@@ -142,7 +142,7 @@ export default function OnePagerOverviewPage() {
         </ul>
       </section>
 
-      <section className="mt-14">
+      <section className="print-break-before mt-14">
         <h2 className="font-display text-xl font-semibold text-[var(--color-dark)] md:text-2xl">
           How it works
         </h2>

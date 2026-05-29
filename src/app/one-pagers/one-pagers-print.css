@@ -1,8 +1,20 @@
 /* Scoped to one-pagers routes via wrapper class in layout. */
 @media print {
+  @page {
+    size: letter;
+    margin: 0.55in;
+  }
+
   .one-pagers-shell {
     background: #fff !important;
     color: #1a1a1a !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .one-pagers-shell * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 
   .one-pagers-shell .one-pagers-header {
@@ -11,6 +23,7 @@
     border-bottom: 1px solid #e5e5e5;
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
+    backdrop-filter: none !important;
   }
 
   .one-pagers-shell a {
@@ -18,12 +31,57 @@
     color: inherit;
   }
 
+  .one-pagers-shell .print-hidden {
+    display: none !important;
+  }
+
   .one-pagers-shell .print-break-before {
     break-before: page;
+    page-break-before: always;
   }
 
   .one-pagers-shell .one-pager-card {
     break-inside: avoid;
+    page-break-inside: avoid;
     box-shadow: none !important;
+  }
+
+  .one-pagers-shell section {
+    break-inside: auto;
+    page-break-inside: auto;
+  }
+
+  .one-pagers-shell table {
+    break-inside: auto;
+    page-break-inside: auto;
+  }
+
+  .one-pagers-shell thead {
+    display: table-header-group;
+  }
+
+  .one-pagers-shell tbody {
+    break-inside: auto;
+    page-break-inside: auto;
+  }
+
+  .one-pagers-shell tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .one-pagers-shell img {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .one-pagers-shell main {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+
+  .one-pagers-shell footer.one-pager-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
   }
 }

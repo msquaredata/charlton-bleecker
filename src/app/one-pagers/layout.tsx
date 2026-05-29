@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import BrandLogo from "@/components/layout/BrandLogo";
+import DownloadPdfButton from "@/components/one-pagers/DownloadPdfButton";
 import "./one-pagers-print.css";
 
 export const metadata: Metadata = {
@@ -23,9 +24,12 @@ export default function OnePagersLayout({
           >
             <BrandLogo className="!h-10 sm:!h-11 md:!h-12" />
           </Link>
-          <p className="text-xs font-medium uppercase tracking-wider text-[var(--color-muted)]">
-            Review materials
-          </p>
+          <div className="flex flex-wrap items-center gap-3">
+            <DownloadPdfButton variant="compact" />
+            <p className="text-xs font-medium uppercase tracking-wider text-[var(--color-muted)]">
+              Review materials
+            </p>
+          </div>
         </div>
       </header>
       {children}

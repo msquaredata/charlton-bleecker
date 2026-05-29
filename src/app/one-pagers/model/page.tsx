@@ -21,7 +21,7 @@ export default function OnePagerModelPage() {
       Charlton Bleecker Group LLC is a private holding company focused on acquiring and growing enduring scalable B2B businesses. We partner with owner-managers to position companies for long-term success, without the constraints of a fund termination date. Your legacy, your team, and your culture remain intact. We welcome challenges, whether operational, financial or succession.
       </p>
 
-      <div className="mt-10 overflow-x-auto rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] shadow-sm">
+      <div className="print:break-after-page mt-10 overflow-x-auto rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] shadow-sm">
         <table className="w-full min-w-[640px] border-collapse text-left text-sm">
           <thead>
             <tr className="border-b border-[var(--color-border)] bg-[var(--color-surface)]">
@@ -44,7 +44,7 @@ export default function OnePagerModelPage() {
               >
                 <th
                   scope="row"
-                  className="one-pager-card px-4 py-3.5 font-medium text-[var(--color-dark)] md:px-5"
+                  className="px-4 py-3.5 font-medium text-[var(--color-dark)] md:px-5"
                 >
                   {row.dimension}
                 </th>
@@ -60,11 +60,11 @@ export default function OnePagerModelPage() {
         </table>
       </div>
 
-      <section className="mt-14">
+      <section className="print:break-after-page print:break-inside-avoid mt-14">
         <h2 className="font-display text-xl font-semibold text-[var(--color-dark)] md:text-2xl">
           Investment criteria
         </h2>
-        <dl className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <dl className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4 print:grid-cols-2">
           {CRITERIA.map((row) => (
             <div
               key={row.label}
@@ -81,11 +81,11 @@ export default function OnePagerModelPage() {
         </dl>
       </section>
 
-      <section className="mt-14">
+      <section className="print:break-inside-avoid mt-14">
         <h2 className="font-display text-xl font-semibold text-[var(--color-dark)] md:text-2xl">
           Path to partnership
         </h2>
-        <ol className="mt-6 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+        <ol className="mt-6 grid gap-3 md:grid-cols-2 lg:grid-cols-3 print:grid-cols-2">
           {PROCESS_STEPS.map((step) => (
             <li
               key={step.number}

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import DownloadPdfButton from "@/components/one-pagers/DownloadPdfButton";
 import {
   CALENDLY_URL,
   CONTACT_EMAIL,
@@ -13,7 +14,7 @@ type OnePagerFooterProps = {
 
 export default function OnePagerFooter({ variant = "leaf" }: OnePagerFooterProps) {
   return (
-    <footer className="one-pager-card mt-16 border-t border-[var(--color-border)] pt-10 pb-6">
+    <footer className="one-pager-card print:break-before-avoid print:mt-10 mt-16 border-t border-[var(--color-border)] pt-10 pb-6">
       <div className="flex flex-col gap-6 md:flex-row md:flex-wrap md:items-center md:justify-between md:gap-4">
         <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           <Link
@@ -36,6 +37,7 @@ export default function OnePagerFooter({ variant = "leaf" }: OnePagerFooterProps
           >
             Email us
           </a>
+          {variant === "leaf" ? <DownloadPdfButton /> : null}
           {NDA_TEMPLATE_HREF ? (
             <a
               href={NDA_TEMPLATE_HREF}

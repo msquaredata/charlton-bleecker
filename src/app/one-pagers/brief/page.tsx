@@ -77,7 +77,7 @@ export default function OnePagerBriefPage() {
         </ol>
       </section>
 
-      <section className="mt-10">
+      <section className="print-break-before mt-10">
         <h2 className="font-display text-xl font-semibold text-[var(--color-dark)]">
           Leadership
         </h2>

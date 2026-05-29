@@ -1,0 +1,33 @@
+import { generateOnePagerPdf } from "@/lib/one-pagers/generate-pdf";
+import { isOnePagerSlug, onePagerPdfFilename } from "@/lib/one-pagers/slugs";
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+export const maxDuration = 60;
+
+type RouteContext = {
+  params: Promise<{ slug: string }>;
+};
+
+export async function GET(_request: Request, context: RouteContext) {
+  const { slug } = await context.params;
+
+  if (!isOnePagerSlug(slug)) {
+    return new Response("Not found", { status: 404 });
+  }
+
+  try {
+    const pdf = await generateOnePagerPdf(slug);
+
+    return new Response(new Uint8Array(pdf), {
+      headers: {
+        "Content-Type": "application/pdf",
+        "Content-Disposition": `attachment; filename="${onePagerPdfFilename(slug)}"`,
+        "Cache-Control": "no-store",
+      },
+    });
+  } catch (error) {
+    console.error("[one-pager-pdf]", slug, error);
+    return new Response("Failed to generate PDF", { status: 500 });
+  }
+}
