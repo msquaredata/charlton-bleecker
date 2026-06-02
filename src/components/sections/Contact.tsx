@@ -1,6 +1,12 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import FormSubmitFeedback from "@/components/forms/FormSubmitFeedback";
+import {
+  FORM_REQUIRED_FIELDS_MESSAGE,
+  scrollToFormFeedback,
+  validateFormClient,
+} from "@/lib/forms/client-form-validation";
 import { Calendar, Mail, Lock } from "lucide-react";
 import FadeUp from "@/components/ui/FadeUp";
 import { NDA_TEMPLATE_HREF } from "@/data/onePagerContent";
@@ -11,15 +17,26 @@ import PublicLeadTurnstile, {
 
 export default function Contact() {
   const honeypotRef = useRef<HTMLInputElement>(null);
+  const feedbackRef = useRef<HTMLDivElement>(null);
   const [turnstileToken, setTurnstileToken] = useState("");
   const [sending, setSending] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (err) scrollToFormFeedback(feedbackRef.current);
+  }, [err]);
+
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setMsg(null);
     setErr(null);
+
+    const form = e.currentTarget;
+    if (!validateFormClient(form)) {
+      setErr(FORM_REQUIRED_FIELDS_MESSAGE);
+      return;
+    }
 
     if (isPublicLeadTurnstileEnabled() && !turnstileToken.trim()) {
       setErr("Please complete the security check below.");
@@ -144,6 +161,7 @@ export default function Contact() {
           <FadeUp delay={0.12}>
             <form
               onSubmit={onSubmit}
+              noValidate
               className="relative rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] p-8 shadow-sm"
             >
               <PublicLeadHoneypotInput ref={honeypotRef} />
@@ -189,16 +207,12 @@ export default function Contact() {
                 onToken={setTurnstileToken}
                 onExpire={() => setTurnstileToken("")}
               />
-              {msg ? (
-                <p className="mt-4 text-sm text-green-700" role="status">
-                  {msg}
-                </p>
-              ) : null}
-              {err ? (
-                <p className="mt-4 text-sm text-red-700" role="alert">
-                  {err}
-                </p>
-              ) : null}
+              <FormSubmitFeedback
+                ref={feedbackRef}
+                className="mt-4"
+                success={msg}
+                error={err}
+              />
               <button
                 type="submit"
                 disabled={sending}

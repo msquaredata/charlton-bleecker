@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import FadeUp from "@/components/ui/FadeUp";
 import LeadFormDevFixtures from "@/components/intake/LeadFormDevFixtures";
@@ -28,6 +28,12 @@ import PublicLeadHoneypotInput from "@/components/forms/PublicLeadHoneypotInput"
 import PublicLeadTurnstile, {
   isPublicLeadTurnstileEnabled,
 } from "@/components/forms/PublicLeadTurnstile";
+import FormSubmitFeedback from "@/components/forms/FormSubmitFeedback";
+import {
+  FORM_REQUIRED_FIELDS_MESSAGE,
+  scrollToFormFeedback,
+  validateFormClient,
+} from "@/lib/forms/client-form-validation";
 
 function FieldLabel({
   htmlFor,
@@ -157,6 +163,7 @@ function OptionsSelect({
 export default function Submit({ initialOptions }: SubmitProps) {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
+  const feedbackRef = useRef<HTMLDivElement>(null);
   const honeypotRef = useRef<HTMLInputElement>(null);
   const { options, errors } = useLeadFormOptions(initialOptions);
   const [keyassets, setKeyassets] = useState<string[]>([]);
@@ -166,9 +173,19 @@ export default function Submit({ initialOptions }: SubmitProps) {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [showInlineThankYou, setShowInlineThankYou] = useState(false);
 
+  useEffect(() => {
+    if (errorMsg) scrollToFormFeedback(feedbackRef.current);
+  }, [errorMsg]);
+
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setErrorMsg(null);
+
+    const form = e.currentTarget;
+    if (!validateFormClient(form)) {
+      setErrorMsg(FORM_REQUIRED_FIELDS_MESSAGE);
+      return;
+    }
 
     if (isPublicLeadTurnstileEnabled() && !turnstileToken.trim()) {
       setErrorMsg("Please complete the security check below.");
@@ -176,7 +193,6 @@ export default function Submit({ initialOptions }: SubmitProps) {
     }
 
     setSubmitting(true);
-    const form = e.currentTarget;
     const fd = new FormData(form);
 
     const website = String(fd.get("website") || "").trim();
@@ -266,15 +282,6 @@ export default function Submit({ initialOptions }: SubmitProps) {
             <PublicLeadHoneypotInput ref={honeypotRef} />
             <input type="hidden" name="keyassets" value={keyassets.join(", ")} />
             <input type="hidden" name="challenge" value={challenge.join(", ")} />
-            {errorMsg ? (
-              <div
-                role="alert"
-                className="rounded-md border border-red-400/60 bg-red-950/40 px-4 py-3 text-sm"
-              >
-                {errorMsg}
-              </div>
-            ) : null}
-
             <div>
               <h3 className="font-display text-lg font-semibold">1 · Contact</h3>
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -631,7 +638,13 @@ export default function Submit({ initialOptions }: SubmitProps) {
               onExpire={() => setTurnstileToken("")}
             />
 
-            <div className="flex flex-col gap-4 border-t border-white/15 pt-8 sm:flex-row sm:items-center sm:justify-between">
+            <div className="space-y-4 border-t border-white/15 pt-8">
+              <FormSubmitFeedback
+                ref={feedbackRef}
+                theme="dark"
+                error={errorMsg}
+              />
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-xs text-white/60">
                 By submitting, you agree to our confidentiality &amp; data use
                 terms.
@@ -643,6 +656,7 @@ export default function Submit({ initialOptions }: SubmitProps) {
               >
                 {submitting ? "Submitting..." : "Submit"}
               </button>
+              </div>
             </div>
           </form>
           )}
