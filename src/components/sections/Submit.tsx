@@ -24,6 +24,10 @@ import {
   leadIntakeApiUrl,
   normalizeThankYouRedirect,
 } from "@/lib/intake/normalize-redirect";
+import PublicLeadHoneypotInput from "@/components/forms/PublicLeadHoneypotInput";
+import PublicLeadTurnstile, {
+  isPublicLeadTurnstileEnabled,
+} from "@/components/forms/PublicLeadTurnstile";
 
 function FieldLabel({
   htmlFor,
@@ -153,17 +157,25 @@ function OptionsSelect({
 export default function Submit({ initialOptions }: SubmitProps) {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
+  const honeypotRef = useRef<HTMLInputElement>(null);
   const { options, errors } = useLeadFormOptions(initialOptions);
   const [keyassets, setKeyassets] = useState<string[]>([]);
   const [challenge, setChallenge] = useState<string[]>([]);
+  const [turnstileToken, setTurnstileToken] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [showInlineThankYou, setShowInlineThankYou] = useState(false);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setSubmitting(true);
     setErrorMsg(null);
+
+    if (isPublicLeadTurnstileEnabled() && !turnstileToken.trim()) {
+      setErrorMsg("Please complete the security check below.");
+      return;
+    }
+
+    setSubmitting(true);
     const form = e.currentTarget;
     const fd = new FormData(form);
 
@@ -177,6 +189,11 @@ export default function Submit({ initialOptions }: SubmitProps) {
       fd.delete("hasManagementTeam");
     } else {
       fd.set("hasManagementTeam", "on");
+    }
+
+    fd.set("_lead_hp", honeypotRef.current?.value ?? "");
+    if (turnstileToken.trim()) {
+      fd.set("cf-turnstile-response", turnstileToken.trim());
     }
 
     try {
@@ -246,6 +263,7 @@ export default function Submit({ initialOptions }: SubmitProps) {
             onSubmit={onSubmit}
             noValidate
           >
+            <PublicLeadHoneypotInput ref={honeypotRef} />
             <input type="hidden" name="keyassets" value={keyassets.join(", ")} />
             <input type="hidden" name="challenge" value={challenge.join(", ")} />
             {errorMsg ? (
@@ -606,6 +624,12 @@ export default function Submit({ initialOptions }: SubmitProps) {
                 </div>
               </div>
             </div>
+
+            <PublicLeadTurnstile
+              className="border-t border-white/15 pt-6"
+              onToken={setTurnstileToken}
+              onExpire={() => setTurnstileToken("")}
+            />
 
             <div className="flex flex-col gap-4 border-t border-white/15 pt-8 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-xs text-white/60">

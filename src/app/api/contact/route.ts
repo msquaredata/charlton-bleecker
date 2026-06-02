@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { sendViaResend } from "@/lib/intake/email.js";
+import {
+  omitSpamGuardFields,
+  runPublicLeadSpamGuard,
+} from "@/lib/public-lead-spam-guard";
 
 export const runtime = "nodejs";
 
@@ -18,7 +22,20 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  const parsed = schema.safeParse(body);
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+
+  const guard = await runPublicLeadSpamGuard(
+    request,
+    body as Record<string, unknown>,
+  );
+  if (guard.shortCircuit) {
+    return NextResponse.json(guard.body, { status: guard.status });
+  }
+
+  const clean = omitSpamGuardFields(body as Record<string, unknown>);
+  const parsed = schema.safeParse(clean);
   if (!parsed.success) {
     return NextResponse.json(
       { error: "Validation failed", fields: parsed.error.flatten() },

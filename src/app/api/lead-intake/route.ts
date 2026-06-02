@@ -18,6 +18,10 @@ import {
   buildTeamNotifySubject,
   buildTeamNotifyBody,
 } from "@/lib/intake/email.js";
+import {
+  guardBodyFromFormData,
+  runPublicLeadSpamGuard,
+} from "@/lib/public-lead-spam-guard";
 
 export const runtime = "nodejs";
 
@@ -110,6 +114,14 @@ export async function POST(request: NextRequest) {
       { error: "Invalid form data" },
       { status: 400, headers },
     );
+  }
+
+  const guard = await runPublicLeadSpamGuard(
+    request,
+    guardBodyFromFormData(formData),
+  );
+  if (guard.shortCircuit) {
+    return NextResponse.json(guard.body, { status: guard.status, headers });
   }
 
   const raw: Record<string, string> = {

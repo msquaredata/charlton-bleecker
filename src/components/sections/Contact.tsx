@@ -1,38 +1,59 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Calendar, Mail, Lock } from "lucide-react";
 import FadeUp from "@/components/ui/FadeUp";
 import { NDA_TEMPLATE_HREF } from "@/data/onePagerContent";
+import PublicLeadHoneypotInput from "@/components/forms/PublicLeadHoneypotInput";
+import PublicLeadTurnstile, {
+  isPublicLeadTurnstileEnabled,
+} from "@/components/forms/PublicLeadTurnstile";
 
 export default function Contact() {
+  const honeypotRef = useRef<HTMLInputElement>(null);
+  const [turnstileToken, setTurnstileToken] = useState("");
   const [sending, setSending] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setSending(true);
     setMsg(null);
     setErr(null);
+
+    if (isPublicLeadTurnstileEnabled() && !turnstileToken.trim()) {
+      setErr("Please complete the security check below.");
+      return;
+    }
+
+    setSending(true);
     const fd = new FormData(e.currentTarget);
-    const payload = {
+    const payload: Record<string, string> = {
       name: String(fd.get("name") || ""),
       email: String(fd.get("email") || ""),
       message: String(fd.get("message") || ""),
+      _lead_hp: honeypotRef.current?.value ?? "",
     };
+    if (turnstileToken.trim()) {
+      payload.cfTurnstileResponse = turnstileToken.trim();
+    }
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
+      const data = (await res.json().catch(() => ({}))) as {
+        error?: string;
+        message?: string;
+        success?: boolean;
+      };
       if (!res.ok) {
-        const data = (await res.json().catch(() => ({}))) as { error?: string };
         throw new Error(data.error || "Failed to send");
       }
-      setMsg("Thanks, we received your message.");
+      setMsg(data.message || "Thanks, we received your message.");
       e.currentTarget.reset();
+      setTurnstileToken("");
     } catch (e2: unknown) {
       setErr(e2 instanceof Error ? e2.message : "Something went wrong.");
     } finally {
@@ -123,8 +144,9 @@ export default function Contact() {
           <FadeUp delay={0.12}>
             <form
               onSubmit={onSubmit}
-              className="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] p-8 shadow-sm"
+              className="relative rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] p-8 shadow-sm"
             >
+              <PublicLeadHoneypotInput ref={honeypotRef} />
               <div>
                 <label htmlFor="contact-name" className="text-sm font-medium">
                   Name
@@ -162,6 +184,11 @@ export default function Contact() {
                   className={field}
                 />
               </div>
+              <PublicLeadTurnstile
+                className="mt-4"
+                onToken={setTurnstileToken}
+                onExpire={() => setTurnstileToken("")}
+              />
               {msg ? (
                 <p className="mt-4 text-sm text-green-700" role="status">
                   {msg}
