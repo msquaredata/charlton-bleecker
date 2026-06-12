@@ -13,6 +13,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "trim-team-photos": "node scripts/trim-team-photos.mjs",
+    "process-favicon": "node scripts/process-favicon.mjs",
     "postbuild": "next-sitemap"
   },
   "dependencies": {
