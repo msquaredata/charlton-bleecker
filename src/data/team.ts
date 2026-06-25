@@ -33,7 +33,7 @@ export const TEAM = [
   },
   {
     name: "John Rohan, CPA",
-    title: "Director of Accounting",
+    title: "Director, Accounting",
     photo: "/team/johnrohan.jpg",
     bio: "John has 20+ years of US GAAP and SEC experience advising public and private clients in complex accounting areas. He started at BDO USA as Senior Manager and later held senior accounting roles at MDC Partners, Monster Worldwide, and GT Nexus.",
     linkedin: "https://www.linkedin.com/in/john-rohan-cpa-9347933/",
