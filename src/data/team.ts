@@ -25,7 +25,7 @@ export const TEAM = [
   },
   {
     name: "L. Tracy Silva, MD",
-    title: "Director, Healthcare Investments",
+    title: "Director of ealthcare Investments",
     photo: "/team/ltracysilva.jpg",
     bio: "Dr. Silva is a board-certified physician in internal medicine in private practice since 2000 and a Member of the American College of Physicians. She has served as a preceptor at Columbia University College of Physicians and Surgeons. She has been recognized by Castle Connolly Top Doctors Awards including Exceptional Women in Medicine (2020–present).",
     linkedin: null,
@@ -33,7 +33,7 @@ export const TEAM = [
   },
   {
     name: "John Rohan, CPA",
-    title: "Director, Accounting",
+    title: "Director of Accounting",
     photo: "/team/johnrohan.jpg",
     bio: "John has 20+ years of US GAAP and SEC experience advising public and private clients in complex accounting areas. He started at BDO USA as Senior Manager and later held senior accounting roles at MDC Partners, Monster Worldwide, and GT Nexus.",
     linkedin: "https://www.linkedin.com/in/john-rohan-cpa-9347933/",
