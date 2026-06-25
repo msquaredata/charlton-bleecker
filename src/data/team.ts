@@ -8,6 +8,14 @@ export const TEAM = [
     role: "leadership" as const,
   },
   {
+    name: "Michael Milian",
+    title: "Operating Partner",
+    photo: "/team/michaelmilian.jpg",
+    bio: "Michael is a technology and operations strategist with 20+ years of experience across healthcare, consumer goods, and manufacturing. His background includes roles at IBM, Hewlett-Packard, Bacardi, and Costa Farms, and he leads mSquare Solutions, his technology advisory consultancy.",
+    linkedin: "https://www.linkedin.com/in/michael-milian-243b831/",
+    role: "directors" as const,
+  },
+  {
     name: "Ed Ristaino",
     title: "Director",
     photo: "/team/edristaino.jpg",
@@ -16,16 +24,8 @@ export const TEAM = [
     role: "directors" as const,
   },
   {
-    name: "Michael Milian",
-    title: "Director",
-    photo: "/team/michaelmilian.jpg",
-    bio: "Michael is a technology and operations strategist with 20+ years of experience across healthcare, consumer goods, and manufacturing. His background includes roles at IBM, Hewlett-Packard, Bacardi, and Costa Farms, and he leads mSquare Solutions, his technology advisory consultancy.",
-    linkedin: "https://www.linkedin.com/in/michael-milian-243b831/",
-    role: "directors" as const,
-  },
-  {
     name: "L. Tracy Silva, MD",
-    title: "Director",
+    title: "Director, Healthcare Investments",
     photo: "/team/ltracysilva.jpg",
     bio: "Dr. Silva is a board-certified physician in internal medicine in private practice since 2000 and a Member of the American College of Physicians. She has served as a preceptor at Columbia University College of Physicians and Surgeons. She has been recognized by Castle Connolly Top Doctors Awards including Exceptional Women in Medicine (2020–present).",
     linkedin: null,
@@ -33,7 +33,7 @@ export const TEAM = [
   },
   {
     name: "John Rohan, CPA",
-    title: "Director",
+    title: "Director of Accounting",
     photo: "/team/johnrohan.jpg",
     bio: "John has 20+ years of US GAAP and SEC experience advising public and private clients in complex accounting areas. He started at BDO USA as Senior Manager and later held senior accounting roles at MDC Partners, Monster Worldwide, and GT Nexus.",
     linkedin: "https://www.linkedin.com/in/john-rohan-cpa-9347933/",
