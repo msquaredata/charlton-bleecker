@@ -25,7 +25,7 @@ export const TEAM = [
   },
   {
     name: "L. Tracy Silva, MD",
-    title: "Director of ealthcare Investments",
+    title: "Director of Healthcare Investments",
     photo: "/team/ltracysilva.jpg",
     bio: "Dr. Silva is a board-certified physician in internal medicine in private practice since 2000 and a Member of the American College of Physicians. She has served as a preceptor at Columbia University College of Physicians and Surgeons. She has been recognized by Castle Connolly Top Doctors Awards including Exceptional Women in Medicine (2020–present).",
     linkedin: null,
