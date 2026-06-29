@@ -1,6 +1,15 @@
 import Image from "next/image";
 import { CALENDLY_URL, CONTACT_EMAIL } from "@/data/onePagerContent";
 
+export const problemAreasPost = {
+  slug: "blog-post-four-43xem",
+  title:
+    "10 problem areas that erode your business value…and how we'll fix them.",
+  author: "G. Todd Silva",
+  excerpt:
+    "Our team has invested in hundreds of companies. We have observed countless problems which slowly (then quickly) erode the value you worked so hard to create. These are our top 10...",
+} as const;
+
 const paragraphClass =
   "mb-6 text-lg leading-relaxed text-[var(--color-muted)]";
 

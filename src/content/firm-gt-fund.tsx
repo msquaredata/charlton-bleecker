@@ -1,5 +1,13 @@
 import Image from "next/image";
 
+export const firmGtFundPost = {
+  slug: "firm-gt-fund",
+  title: "Firm > Fund",
+  author: "G. Todd Silva",
+  excerpt:
+    "I believe that most investors are running funds, and very few people are building firms. What do I mean by that? A fund, by my definition, has a single objective function: “how do I generate the most carry with the fewest people in the shortest amount of time?” Whereas a firm, in my definition, has two objectives. One is delivering exceptional returns, but the second is equally interesting: “How do I build a source of compounding competitive advantage?”",
+} as const;
+
 const paragraphClass =
   "mb-6 text-lg leading-relaxed text-[var(--color-muted)]";
 
