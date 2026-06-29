@@ -23,7 +23,7 @@ export default function Blog() {
             >
               <article className="flex h-full min-h-0 flex-col rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] p-8 shadow-sm">
                 <p className="text-xs uppercase tracking-wide text-[var(--color-muted)]">
-                  {post.date} · {post.author}
+                  {post.author}
                 </p>
                 <h3 className="mt-3 font-display text-2xl font-semibold text-[var(--color-dark)]">
                   {post.title}
