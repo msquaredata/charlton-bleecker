@@ -11,7 +11,7 @@ export const TEAM = [
     name: "Michael Milian",
     title: "Operating Partner",
     photo: "/team/michaelmilian.jpg",
-    bio: "Michael is a technology and operations strategist with 20+ years of experience across healthcare, consumer goods, and manufacturing. His background includes roles at IBM, Hewlett-Packard, Bacardi, and Costa Farms, and he leads mSquare Solutions, his technology advisory consultancy.",
+    bio: "Michael is a technology and operations strategist with 25+ years of experience across healthcare, consumer goods, and manufacturing. His background includes roles at IBM, Hewlett-Packard, Bacardi, and Costa Farms, and he leads mSquare Solutions, his technology advisory consultancy.",
     linkedin: "https://www.linkedin.com/in/michael-milian-243b831/",
     role: "directors" as const,
   },
