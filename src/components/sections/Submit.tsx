@@ -16,7 +16,6 @@ export type SubmitProps = {
 import {
   CHALLENGES,
   KEY_ASSETS,
-  PHONE_PATTERN,
   WEBSITE_PATTERN,
 } from "@/lib/intake/lead-form-options";
 import { isEmbeddedFrame } from "@/lib/intake/is-embedded";
@@ -34,6 +33,19 @@ import {
   scrollToFormFeedback,
   validateFormClient,
 } from "@/lib/forms/client-form-validation";
+import {
+  formatUsPhoneInput,
+  isValidUsPhone,
+  PHONE_INVALID_MESSAGE,
+} from "@/lib/forms/phone";
+
+function syncPhoneField(input: HTMLInputElement) {
+  const formatted = formatUsPhoneInput(input.value);
+  input.value = formatted;
+  input.setCustomValidity(
+    formatted && !isValidUsPhone(formatted) ? PHONE_INVALID_MESSAGE : "",
+  );
+}
 
 function FieldLabel({
   htmlFor,
@@ -182,8 +194,15 @@ export default function Submit({ initialOptions }: SubmitProps) {
     setErrorMsg(null);
 
     const form = e.currentTarget;
+    const phoneInput = form.elements.namedItem("phone") as HTMLInputElement | null;
+    if (phoneInput) syncPhoneField(phoneInput);
+
     if (!validateFormClient(form)) {
-      setErrorMsg(FORM_REQUIRED_FIELDS_MESSAGE);
+      const phoneInvalid =
+        phoneInput &&
+        phoneInput.value.trim() &&
+        !isValidUsPhone(phoneInput.value);
+      setErrorMsg(phoneInvalid ? PHONE_INVALID_MESSAGE : FORM_REQUIRED_FIELDS_MESSAGE);
       return;
     }
 
@@ -344,12 +363,14 @@ export default function Submit({ initialOptions }: SubmitProps) {
                     name="phone"
                     type="tel"
                     required
-                    pattern={PHONE_PATTERN}
-                    title="Please enter a phone number in the format XXX-XXX-XXXX, optionally including the country code (e.g., +1-555-000-1234)."
-                    placeholder="+1-555-000-1234"
+                    autoComplete="tel"
+                    inputMode="tel"
+                    title={PHONE_INVALID_MESSAGE}
+                    placeholder="(555) 123-4567"
                     className={inputClass}
-                  />
-                </div>
+                    onChange={(e) => syncPhoneField(e.currentTarget)}
+                    onBlur={(e) => syncPhoneField(e.currentTarget)}
+                  />                </div>
                 <div className="sm:col-span-2">
                   <FieldLabel htmlFor="companyRepresentedInput">
                     Company represented (if not owner)

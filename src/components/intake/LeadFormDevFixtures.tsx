@@ -7,7 +7,7 @@ const TEST = {
   lastName: "Tester",
   role: "Advisor",
   email: "jane.tester@example.com",
-  phone: "555-123-4567",
+  phone: "(555) 123-4567",
   companyRepresented: "Test Advisors LLC",
   businessName: "Acme Demo Services Inc.",
   website: "www.acme-demo-services.com",

@@ -22,6 +22,7 @@ import {
   guardBodyFromFormData,
   runPublicLeadSpamGuard,
 } from "@/lib/public-lead-spam-guard";
+import { isValidUsPhone, PHONE_INVALID_MESSAGE } from "@/lib/forms/phone";
 
 export const runtime = "nodejs";
 
@@ -161,6 +162,13 @@ export async function POST(request: NextRequest) {
   if (missing.length) {
     return NextResponse.json(
       { error: "Missing required fields", fields: missing },
+      { status: 400, headers },
+    );
+  }
+
+  if (!isValidUsPhone(raw.phone)) {
+    return NextResponse.json(
+      { error: PHONE_INVALID_MESSAGE, fields: ["phone"] },
       { status: 400, headers },
     );
   }

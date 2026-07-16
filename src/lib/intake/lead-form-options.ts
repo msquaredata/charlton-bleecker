@@ -76,5 +76,3 @@ export const CHALLENGES = [
 
 export const WEBSITE_PATTERN =
   "^(https?:\\/\\/)?(www\\.)?[a-zA-Z0-9][a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9]?(\\.[a-zA-Z]{2,})+(/.*)?$";
-
-export const PHONE_PATTERN = "^(\\+?1-)?\\d{3}-\\d{3}-\\d{4}$";
