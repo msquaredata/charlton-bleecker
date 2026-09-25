@@ -17,6 +17,10 @@ type TeamPhotoLightbox = {
   returnFocus?: () => void;
 };
 
+function memberPhotoStyle(member: (typeof TEAM)[number]) {
+  return "photoStyle" in member ? member.photoStyle : undefined;
+}
+
 function lockBodyScroll() {
   const scrollbarWidth =
     window.innerWidth - document.documentElement.clientWidth;
@@ -172,6 +176,7 @@ function MemberAvatar({
           src={src}
           alt=""
           fill
+          style={memberPhotoStyle(member)}
           className="object-cover object-[center_22%] transition-transform duration-200 group-hover:scale-105"
           sizes="112px"
           onError={() => setFailCount((n) => n + 1)}
