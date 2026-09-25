@@ -18,7 +18,16 @@ export const TEAM = [
   {
     name: "Ed Ristaino",
     title: "Director",
-    photo: "/team/edristaino.jpg",
+    photo: "/team/edristaino-2.jpg",
+    /**
+     * Lower the subject in the circular avatar so hair isn’t clipped.
+     * Applied as an inline style (not Tailwind) so the transform always wins
+     * over Next/Image `fill` positioning.
+     */
+    photoStyle: {
+      objectPosition: "center 10%",
+      transform: "translateY(28%) scale(1.5)",
+    },
     bio: "Ed was a partner for 30 years at Akerman LLP and served as lead counsel in hundreds of M&A transactions across healthcare, technology, and professional services. He is currently general counsel, investor, and board member of Cimarron Insurance Company and an investor in Ristaino Hospitality LLC.",
     linkedin: null,
     role: "directors" as const,
