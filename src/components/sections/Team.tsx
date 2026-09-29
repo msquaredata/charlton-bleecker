@@ -14,8 +14,18 @@ import { cn } from "@/lib/utils";
 type TeamPhotoLightbox = {
   src: string;
   name: string;
+  objectPosition?: string;
   returnFocus?: () => void;
 };
+
+const DEFAULT_PHOTO_OBJECT_POSITION = "center 22%";
+
+function memberPhotoObjectPosition(member: (typeof TEAM)[number]): string {
+  if ("photoObjectPosition" in member && typeof member.photoObjectPosition === "string") {
+    return member.photoObjectPosition;
+  }
+  return DEFAULT_PHOTO_OBJECT_POSITION;
+}
 
 function lockBodyScroll() {
   const scrollbarWidth =
@@ -65,10 +75,12 @@ function Bio({ text }: { text: string }) {
 function AvatarLightbox({
   src,
   name,
+  objectPosition = DEFAULT_PHOTO_OBJECT_POSITION,
   onClose,
 }: {
   src: string;
   name: string;
+  objectPosition?: string;
   onClose: () => void;
 }) {
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -105,7 +117,8 @@ function AvatarLightbox({
             src={src}
             alt={name}
             fill
-            className="object-cover object-[center_22%]"
+            className="object-cover"
+            style={{ objectPosition }}
             sizes="(max-width: 768px) 92vw, 672px"
             priority
           />
@@ -151,6 +164,7 @@ function MemberAvatar({
   }
 
   const src = candidates[failCount];
+  const objectPosition = memberPhotoObjectPosition(member);
 
   return (
     <>
@@ -163,6 +177,7 @@ function MemberAvatar({
           onOpenPhoto({
             src,
             name: member.name,
+            objectPosition,
             returnFocus: () =>
               triggerRef.current?.focus({ preventScroll: true }),
           })
@@ -172,7 +187,8 @@ function MemberAvatar({
           src={src}
           alt=""
           fill
-          className="object-cover object-[center_22%] transition-transform duration-200 group-hover:scale-105"
+          className="object-cover transition-transform duration-200 group-hover:scale-105"
+          style={{ objectPosition }}
           sizes="112px"
           onError={() => setFailCount((n) => n + 1)}
         />
@@ -255,6 +271,7 @@ export default function Team() {
                   key={lightbox.name}
                   src={lightbox.src}
                   name={lightbox.name}
+                  objectPosition={lightbox.objectPosition}
                   onClose={closePhoto}
                 />
               ) : null}
