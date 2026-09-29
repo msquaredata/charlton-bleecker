@@ -667,8 +667,15 @@ export default function Submit({ initialOptions }: SubmitProps) {
               />
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-xs text-white/60">
-                By submitting, you agree to our confidentiality &amp; data use
-                terms.
+                By submitting, you agree to our{" "}
+                <a href="/privacy" className="underline hover:text-white">
+                  Privacy Policy
+                </a>{" "}
+                and{" "}
+                <a href="/terms" className="underline hover:text-white">
+                  Terms of Use
+                </a>
+                , including our confidentiality &amp; data use terms.
               </p>
               <button
                 type="submit"

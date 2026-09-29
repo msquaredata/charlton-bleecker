@@ -69,7 +69,7 @@ export const TRUST_LEAD = TEAM[0]
   : "Leadership combines deep experience across investing, banking, operations, and governance.";
 
 export const DISCLAIMER_SHORT =
-  "This material is for informational purposes only and does not constitute an offer to sell or a solicitation to buy any security." as const;
+  "This material is for informational purposes only and does not constitute an offer to sell or a solicitation to buy any security, or investment, legal, or tax advice." as const;
 
 export const ONE_PAGER_VARIANTS = [
   {

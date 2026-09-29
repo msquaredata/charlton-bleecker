@@ -1,16 +1,26 @@
-import Link from "next/link";
+import type { Metadata } from "next";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+import { LegalDoc } from "@/components/legal/LegalDoc";
+import { DisclaimerContent } from "@/components/legal/DisclaimerContent";
+
+export const metadata: Metadata = {
+  title: "Disclaimer | Charlton Bleecker",
+  description:
+    "Investment and informational disclaimers for Charlton Bleecker Group LLC website content, criteria, and materials.",
+  robots: { index: true, follow: true },
+};
 
 export default function DisclaimerPage() {
   return (
-    <main className="container-site section-pad max-w-2xl">
-      <h1 className="font-display text-3xl font-semibold">Disclaimer</h1>
-      <p className="mt-6 text-[var(--color-muted)]">
-        Investment-related disclaimers will be confirmed with legal counsel. This
-        placeholder exists so footer links resolve during development.
-      </p>
-      <Link href="/" className="mt-8 inline-block text-[var(--color-accent)]">
-        ← Home
-      </Link>
-    </main>
+    <>
+      <Navbar />
+      <div className="pt-24 md:pt-28">
+        <LegalDoc title="Disclaimer" updated="September 29, 2026">
+          <DisclaimerContent />
+        </LegalDoc>
+      </div>
+      <Footer />
+    </>
   );
 }

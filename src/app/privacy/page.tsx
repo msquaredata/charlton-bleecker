@@ -1,17 +1,26 @@
-import Link from "next/link";
+import type { Metadata } from "next";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+import { LegalDoc } from "@/components/legal/LegalDoc";
+import { PrivacyContent } from "@/components/legal/PrivacyContent";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy | Charlton Bleecker",
+  description:
+    "How Charlton Bleecker Group LLC collects, uses, and protects information submitted through our website and company intake forms.",
+  robots: { index: true, follow: true },
+};
 
 export default function PrivacyPage() {
   return (
-    <main className="container-site section-pad max-w-2xl">
-      <h1 className="font-display text-3xl font-semibold">Privacy Policy</h1>
-      <p className="mt-6 text-[var(--color-muted)]">
-        Final privacy policy text will be provided by Charlton Bleecker legal
-        counsel. This placeholder exists so footer links resolve during
-        development.
-      </p>
-      <Link href="/" className="mt-8 inline-block text-[var(--color-accent)]">
-        ← Home
-      </Link>
-    </main>
+    <>
+      <Navbar />
+      <div className="pt-24 md:pt-28">
+        <LegalDoc title="Privacy Policy" updated="September 29, 2026">
+          <PrivacyContent />
+        </LegalDoc>
+      </div>
+      <Footer />
+    </>
   );
 }
