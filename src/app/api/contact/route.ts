@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { describeSubmissionSignals } from "@/lib/submission-signals";
 import { sendViaResend } from "@/lib/intake/email.js";
 import {
   omitSpamGuardFields,
@@ -58,7 +59,7 @@ export async function POST(request: NextRequest) {
   }
 
   const subject = `Website contact: ${name}`;
-  const text = `Name: ${name}\nEmail: ${email}\n\n${message}`;
+  const text = `Name: ${name}\nEmail: ${email}\n\n${message}\n\n${describeSubmissionSignals(request.headers, guard.botCheck)}`;
 
   const result = await sendViaResend({
     to,

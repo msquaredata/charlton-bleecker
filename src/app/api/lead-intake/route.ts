@@ -22,6 +22,7 @@ import {
   guardBodyFromFormData,
   runPublicLeadSpamGuard,
 } from "@/lib/public-lead-spam-guard";
+import { describeSubmissionSignals } from "@/lib/submission-signals";
 import { isValidUsPhone, PHONE_INVALID_MESSAGE } from "@/lib/forms/phone";
 
 export const runtime = "nodejs";
@@ -187,7 +188,7 @@ export async function POST(request: NextRequest) {
       "lead-intake: HubSpot skipped (LEAD_INTAKE_BYPASS_HUBSPOT). Team + submitter email via Resend; never enable in production.",
     );
     const subject = buildTeamNotifySubject(raw);
-    const text = buildTeamNotifyBody(raw, n, "bypass-no-hubspot-deal");
+    const text = `${buildTeamNotifyBody(raw, n, "bypass-no-hubspot-deal")}\n\n${describeSubmissionSignals(request.headers, guard.botCheck)}`;
     const emailResult = await sendTeamNotification({ subject, text });
     if (emailResult.skipped) {
       console.warn(
@@ -295,7 +296,7 @@ export async function POST(request: NextRequest) {
     await associateV4DefaultPut(token, "deal", dealId, "company", companyId);
 
     const subject = buildTeamNotifySubject(raw);
-    const text = buildTeamNotifyBody(raw, n, dealId);
+    const text = `${buildTeamNotifyBody(raw, n, dealId)}\n\n${describeSubmissionSignals(request.headers, guard.botCheck)}`;
     const emailResult = await sendTeamNotification({ subject, text });
     if (emailResult.skipped) {
       console.warn(

@@ -54,9 +54,12 @@ async function verifyTurnstileToken(
   }
 }
 
+/** How the Turnstile bot check came out for a submission that was let through. */
+export type BotCheckResult = "passed" | "test-mode" | "not-configured";
+
 export type PublicLeadSpamGuardResult =
   | { shortCircuit: true; status: number; body: Record<string, unknown> }
-  | { shortCircuit: false };
+  | { shortCircuit: false; botCheck: BotCheckResult };
 
 /** Honeypot + Turnstile. Does not mutate body. */
 export async function runPublicLeadSpamGuard(
@@ -75,6 +78,7 @@ export async function runPublicLeadSpamGuard(
   }
 
   const secret = process.env.TURNSTILE_SECRET_KEY?.trim();
+  let botCheck: BotCheckResult = "not-configured";
   if (secret) {
     const token = extractTurnstileToken(body);
     if (!token) {
@@ -102,9 +106,13 @@ export async function runPublicLeadSpamGuard(
         },
       };
     }
+    botCheck =
+      secret === TURNSTILE_CLOUDFLARE_TEST_SECRET_ALWAYS_PASS
+        ? "test-mode"
+        : "passed";
   }
 
-  return { shortCircuit: false };
+  return { shortCircuit: false, botCheck };
 }
 
 const SPAM_GUARD_BODY_KEYS = [
