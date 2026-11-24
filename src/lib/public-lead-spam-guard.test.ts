@@ -75,7 +75,7 @@ describe("runPublicLeadSpamGuard", () => {
     const result = await runPublicLeadSpamGuard(request, {
       cfTurnstileResponse: "dummy-token",
     });
-    expect(result).toEqual({ shortCircuit: false });
+    expect(result).toEqual({ shortCircuit: false, botCheck: "test-mode" });
   });
 
   it("fails verification for garbage token with real secret", async () => {
