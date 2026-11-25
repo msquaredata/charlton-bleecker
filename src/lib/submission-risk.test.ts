@@ -132,9 +132,9 @@ describe("assessSubmissionRisk", () => {
 
 describe("helpers", () => {
   it("builds subject prefixes", () => {
-    expect(riskSubjectPrefix("red")).toBe("[RED] ");
-    expect(riskSubjectPrefix("yellow")).toBe("[YELLOW] ");
-    expect(riskSubjectPrefix("green")).toBe("[GREEN] ");
+    expect(riskSubjectPrefix("red")).toBe("\u{1F534} High risk | ");
+    expect(riskSubjectPrefix("yellow")).toBe("\u{1F7E1} Medium risk | ");
+    expect(riskSubjectPrefix("green")).toBe("\u{1F7E2} Low risk | ");
   });
 
   it("formats the block with reasons", () => {
@@ -146,7 +146,7 @@ describe("helpers", () => {
       country: "CN",
     });
     const text = formatRiskBlock(r);
-    expect(text).toContain("RISK FLAG:");
+    expect(text).toContain("RISK FLAG: \u{1F7E1} MEDIUM RISK");
     expect(text).toContain("outside the US (CN)");
   });
 
