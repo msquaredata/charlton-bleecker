@@ -18,6 +18,10 @@ import PublicLeadTurnstile, {
 export default function Contact() {
   const honeypotRef = useRef<HTMLInputElement>(null);
   const feedbackRef = useRef<HTMLDivElement>(null);
+  const openedAtRef = useRef<number | null>(null);
+  useEffect(() => {
+    openedAtRef.current = Date.now();
+  }, []);
   const [turnstileToken, setTurnstileToken] = useState("");
   const [sending, setSending] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
@@ -50,6 +54,10 @@ export default function Contact() {
       email: String(fd.get("email") || ""),
       message: String(fd.get("message") || ""),
       _lead_hp: honeypotRef.current?.value ?? "",
+      _lead_elapsed:
+        openedAtRef.current === null
+          ? ""
+          : String(Date.now() - openedAtRef.current),
     };
     if (turnstileToken.trim()) {
       payload.cfTurnstileResponse = turnstileToken.trim();

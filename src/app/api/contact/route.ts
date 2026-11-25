@@ -1,6 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { describeSubmissionSignals } from "@/lib/submission-signals";
+import {
+  assessSubmissionRisk,
+  emailDomain,
+  formatRiskBlock,
+  lookupDomainFacts,
+  parseElapsedMs,
+  riskSubjectPrefix,
+} from "@/lib/submission-risk";
 import { sendViaResend } from "@/lib/intake/email.js";
 import {
   omitSpamGuardFields,
@@ -58,8 +66,18 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const subject = `Website contact: ${name}`;
-  const text = `Name: ${name}\nEmail: ${email}\n\n${message}\n\n${describeSubmissionSignals(request.headers, guard.botCheck)}`;
+  const domain = emailDomain(email);
+  const risk = assessSubmissionRisk({
+    kind: "contact",
+    email,
+    message,
+    country: request.headers.get("x-vercel-ip-country")?.toUpperCase() || undefined,
+    botCheck: guard.botCheck,
+    elapsedMs: parseElapsedMs((body as Record<string, unknown>)._lead_elapsed),
+    domain: domain ? await lookupDomainFacts(domain) : null,
+  });
+  const subject = `${riskSubjectPrefix(risk.level)}Website contact: ${name}`;
+  const text = `Name: ${name}\nEmail: ${email}\n\n${message}\n\n${formatRiskBlock(risk)}\n\n${describeSubmissionSignals(request.headers, guard.botCheck)}`;
 
   const result = await sendViaResend({
     to,

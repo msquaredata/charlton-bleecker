@@ -23,6 +23,14 @@ import {
   runPublicLeadSpamGuard,
 } from "@/lib/public-lead-spam-guard";
 import { describeSubmissionSignals } from "@/lib/submission-signals";
+import {
+  assessSubmissionRisk,
+  emailDomain,
+  formatRiskBlock,
+  lookupDomainFacts,
+  parseElapsedMs,
+  riskSubjectPrefix,
+} from "@/lib/submission-risk";
 import { isValidUsPhone, PHONE_INVALID_MESSAGE } from "@/lib/forms/phone";
 
 export const runtime = "nodejs";
@@ -178,6 +186,28 @@ export async function POST(request: NextRequest) {
 
   const token = process.env.HUBSPOT_ACCESS_TOKEN?.trim();
 
+  const riskDomain = emailDomain(raw.email);
+  const risk = assessSubmissionRisk({
+    kind: "deal",
+    email: raw.email,
+    message: [
+      raw.challenge,
+      raw.fitReason,
+      raw.otherDetails,
+      raw.keyassets,
+      raw.notableCustomers,
+      raw.transitionGoal,
+    ]
+      .filter(Boolean)
+      .join("\n"),
+    country: request.headers.get("x-vercel-ip-country")?.toUpperCase() || undefined,
+    botCheck: guard.botCheck,
+    elapsedMs: parseElapsedMs(formData.get("_lead_elapsed")),
+    hqState: raw.hqState,
+    domain: riskDomain ? await lookupDomainFacts(riskDomain) : null,
+  });
+  const riskSuffix = `\n\n${formatRiskBlock(risk)}\n\n${describeSubmissionSignals(request.headers, guard.botCheck)}`;
+
   const redirectRaw =
     process.env.THANK_YOU_REDIRECT?.trim() || "/thank-you";
   const redirect =
@@ -187,8 +217,8 @@ export async function POST(request: NextRequest) {
     console.warn(
       "lead-intake: HubSpot skipped (LEAD_INTAKE_BYPASS_HUBSPOT). Team + submitter email via Resend; never enable in production.",
     );
-    const subject = buildTeamNotifySubject(raw);
-    const text = `${buildTeamNotifyBody(raw, n, "bypass-no-hubspot-deal")}\n\n${describeSubmissionSignals(request.headers, guard.botCheck)}`;
+    const subject = `${riskSubjectPrefix(risk.level)}${buildTeamNotifySubject(raw)}`;
+    const text = `${buildTeamNotifyBody(raw, n, "bypass-no-hubspot-deal")}${riskSuffix}`;
     const emailResult = await sendTeamNotification({ subject, text });
     if (emailResult.skipped) {
       console.warn(
@@ -295,8 +325,8 @@ export async function POST(request: NextRequest) {
     await associateV4DefaultPut(token, "deal", dealId, "contact", contactId);
     await associateV4DefaultPut(token, "deal", dealId, "company", companyId);
 
-    const subject = buildTeamNotifySubject(raw);
-    const text = `${buildTeamNotifyBody(raw, n, dealId)}\n\n${describeSubmissionSignals(request.headers, guard.botCheck)}`;
+    const subject = `${riskSubjectPrefix(risk.level)}${buildTeamNotifySubject(raw)}`;
+    const text = `${buildTeamNotifyBody(raw, n, dealId)}${riskSuffix}`;
     const emailResult = await sendTeamNotification({ subject, text });
     if (emailResult.skipped) {
       console.warn(
