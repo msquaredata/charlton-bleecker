@@ -15,12 +15,16 @@ export const TURNSTILE_CLOUDFLARE_TEST_SECRET_ALWAYS_PASS =
 export function extractTurnstileToken(
   body: Record<string, unknown>,
 ): string | undefined {
-  const raw =
-    body.cfTurnstileResponse ??
-    body.turnstileToken ??
-    body.cf_turnstile_response ??
-    body["cf-turnstile-response"];
-  if (typeof raw === "string" && raw.trim().length > 0) return raw.trim();
+  // Take the first NON-EMPTY value: multipart bodies carry every key, most of them as "".
+  const candidates = [
+    body.cfTurnstileResponse,
+    body.turnstileToken,
+    body.cf_turnstile_response,
+    body["cf-turnstile-response"],
+  ];
+  for (const raw of candidates) {
+    if (typeof raw === "string" && raw.trim().length > 0) return raw.trim();
+  }
   return undefined;
 }
 
