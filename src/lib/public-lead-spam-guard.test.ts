@@ -97,3 +97,22 @@ describe("runPublicLeadSpamGuard", () => {
     });
   });
 });
+
+describe("extractTurnstileToken with multipart-style empty keys", () => {
+  it("skips empty fields and returns the real token", () => {
+    expect(
+      extractTurnstileToken({
+        cfTurnstileResponse: "",
+        turnstileToken: "",
+        cf_turnstile_response: "",
+        "cf-turnstile-response": " tok123 ",
+      }),
+    ).toBe("tok123");
+  });
+
+  it("returns undefined when every field is empty", () => {
+    expect(
+      extractTurnstileToken({ cfTurnstileResponse: "", "cf-turnstile-response": "" }),
+    ).toBeUndefined();
+  });
+});
