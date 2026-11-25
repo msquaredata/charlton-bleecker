@@ -2,6 +2,8 @@ import { getClientIp } from "@/lib/client-ip";
 
 /** Hidden honeypot field — must stay empty for real users. */
 export const PUBLIC_LEAD_HONEYPOT_FIELD = "_lead_hp";
+/** Milliseconds between the form opening and submitting, measured in the browser (risk flag input only). */
+export const PUBLIC_LEAD_ELAPSED_FIELD = "_lead_elapsed";
 
 const TURNSTILE_VERIFY_URL =
   "https://challenges.cloudflare.com/turnstile/v0/siteverify";
@@ -117,6 +119,7 @@ export async function runPublicLeadSpamGuard(
 
 const SPAM_GUARD_BODY_KEYS = [
   PUBLIC_LEAD_HONEYPOT_FIELD,
+  PUBLIC_LEAD_ELAPSED_FIELD,
   "cfTurnstileResponse",
   "turnstileToken",
   "cf_turnstile_response",

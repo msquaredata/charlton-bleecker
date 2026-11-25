@@ -177,6 +177,10 @@ export default function Submit({ initialOptions }: SubmitProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const feedbackRef = useRef<HTMLDivElement>(null);
   const honeypotRef = useRef<HTMLInputElement>(null);
+  const openedAtRef = useRef<number | null>(null);
+  useEffect(() => {
+    openedAtRef.current = Date.now();
+  }, []);
   const { options, errors } = useLeadFormOptions(initialOptions);
   const [keyassets, setKeyassets] = useState<string[]>([]);
   const [challenge, setChallenge] = useState<string[]>([]);
@@ -227,6 +231,9 @@ export default function Submit({ initialOptions }: SubmitProps) {
     }
 
     fd.set("_lead_hp", honeypotRef.current?.value ?? "");
+    if (openedAtRef.current !== null) {
+      fd.set("_lead_elapsed", String(Date.now() - openedAtRef.current));
+    }
     if (turnstileToken.trim()) {
       fd.set("cf-turnstile-response", turnstileToken.trim());
     }
