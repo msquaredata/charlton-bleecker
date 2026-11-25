@@ -160,20 +160,28 @@ export function assessSubmissionRisk(input: RiskInput): RiskAssessment {
   return { level, score, findings };
 }
 
+const RISK_DISPLAY: Record<RiskLevel, { icon: string; label: string }> = {
+  red: { icon: "\u{1F534}", label: "High risk" },
+  yellow: { icon: "\u{1F7E1}", label: "Medium risk" },
+  green: { icon: "\u{1F7E2}", label: "Low risk" },
+};
+
+/** Subject prefix such as "🔴 High risk | ". */
 export function riskSubjectPrefix(level: RiskLevel): string {
-  return `[${level.toUpperCase()}] `;
+  const d = RISK_DISPLAY[level];
+  return `${d.icon} ${d.label} | `;
 }
 
 export function formatRiskBlock(a: RiskAssessment): string {
-  const label = a.level.toUpperCase();
-  const lines = [`RISK FLAG: ${label} (score ${a.score})`];
+  const d = RISK_DISPLAY[a.level];
+  const lines = [`RISK FLAG: ${d.icon} ${d.label.toUpperCase()} (score ${a.score})`];
   if (a.findings.length === 0) {
     lines.push("- No warning signs found");
   } else {
     for (const f of a.findings) lines.push(`- ${f.reason}${f.hard ? " (strong signal)" : ""}`);
   }
   lines.push(
-    "An automatic estimate from the signals above. Green is not a guarantee and red is not proof; it never blocks a submission.",
+    "An automatic estimate from the signals above. Low risk is not a guarantee and high risk is not proof; it never blocks a submission.",
   );
   return lines.join("\n");
 }
